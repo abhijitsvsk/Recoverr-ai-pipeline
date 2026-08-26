@@ -315,11 +315,21 @@ def simulate_payment_failure():
     db_path = LIVE_TEST_DB_PATH
     db.init_db(db_path)
 
-    reasons = ["gateway_error", "bank_declined", "card_expired", "insufficient_funds", "unmapped_network_drop_99"]
-    amounts = [49900, 89900, 1250000, 1500000]
-    failure_reason = random.choice(reasons)
-    amount_in_paise = random.choice(amounts)
-    attempt_count = random.choice([1, 1, 1, 3])
+    # Multi-category scenario pool covering TEMPORARY, PERMANENT, REPEATED_FAILURE, UNKNOWN, and High-Value Hard Overrides
+    loop1_scenarios = [
+        {"failure_reason": "gateway_error", "attempt_count": 1, "amount_in_paise": 49900},
+        {"failure_reason": "bank_declined", "attempt_count": 2, "amount_in_paise": 89900},
+        {"failure_reason": "card_expired", "attempt_count": 1, "amount_in_paise": 149900},
+        {"failure_reason": "insufficient_funds", "attempt_count": 1, "amount_in_paise": 299900},
+        {"failure_reason": "bank_declined", "attempt_count": 3, "amount_in_paise": 750000},
+        {"failure_reason": "unrecognized_device_glitch_99", "attempt_count": 1, "amount_in_paise": 350000},
+        {"failure_reason": "unmapped_bank_error_88", "attempt_count": 1, "amount_in_paise": 1500000},
+        {"failure_reason": "network_error", "attempt_count": 3, "amount_in_paise": 1250000},
+    ]
+    scen = random.choice(loop1_scenarios)
+    failure_reason = scen["failure_reason"]
+    amount_in_paise = scen["amount_in_paise"]
+    attempt_count = scen["attempt_count"]
 
     payment_id = f"pay_sim_{int(time.time())}_{random.randint(100, 999)}"
     now_str = datetime.now(timezone.utc).isoformat()
@@ -394,11 +404,19 @@ def simulate_checkout_abandonment():
     db_path = LIVE_TEST_CHECKOUT_DB_PATH
     init_checkout_db(db_path)
 
-    reasons = ["cart_idle_15m", "shipping_cost_too_high", "cart_idle_48h", "price_check_behavior", "unmapped_device_glitch_99"]
-    cart_values = [299900, 499900, 1200000, 1500000]
-    abandon_reason = random.choice(reasons)
-    cart_value_in_paise = random.choice(cart_values)
-    abandon_count = random.choice([1, 1, 2])
+    # Multi-category scenario pool covering RECENT_ABANDON, STALE_ABANDON, REPEAT_ABANDONER, HIGH_VALUE_ABANDON, UNKNOWN_ABANDON
+    loop2_scenarios = [
+        {"customer_abandon_reason": "cart_idle_15m", "abandon_count": 1, "cart_value_in_paise": 499900},
+        {"customer_abandon_reason": "shipping_cost_too_high", "abandon_count": 1, "cart_value_in_paise": 299900},
+        {"customer_abandon_reason": "cart_idle_48h", "abandon_count": 1, "cart_value_in_paise": 699900},
+        {"customer_abandon_reason": "price_check_behavior", "abandon_count": 2, "cart_value_in_paise": 799900},
+        {"customer_abandon_reason": "cart_idle_15m", "abandon_count": 1, "cart_value_in_paise": 1500000},
+        {"customer_abandon_reason": "unmapped_browser_crash_77", "abandon_count": 1, "cart_value_in_paise": 399900},
+    ]
+    scen = random.choice(loop2_scenarios)
+    abandon_reason = scen["customer_abandon_reason"]
+    cart_value_in_paise = scen["cart_value_in_paise"]
+    abandon_count = scen["abandon_count"]
 
     checkout_id = f"chk_sim_{int(time.time())}_{random.randint(100, 999)}"
     now_str = datetime.now(timezone.utc).isoformat()

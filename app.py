@@ -326,7 +326,18 @@ def simulate_payment_failure():
         {"failure_reason": "unmapped_bank_error_88", "attempt_count": 1, "amount_in_paise": 1500000},
         {"failure_reason": "network_error", "attempt_count": 3, "amount_in_paise": 1250000},
     ]
-    scen = random.choice(loop1_scenarios)
+    scen_idx = request.args.get("scenario_index")
+    if scen_idx is None and request.is_json and request.json:
+        scen_idx = request.json.get("scenario_index")
+
+    if scen_idx is not None:
+        try:
+            scen = loop1_scenarios[int(scen_idx)]
+        except (IndexError, ValueError):
+            scen = random.choice(loop1_scenarios)
+    else:
+        scen = random.choice(loop1_scenarios)
+
     failure_reason = scen["failure_reason"]
     amount_in_paise = scen["amount_in_paise"]
     attempt_count = scen["attempt_count"]

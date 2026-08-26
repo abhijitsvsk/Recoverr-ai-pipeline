@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay RecoverAI — Merchant Payment Recovery Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --card-bg: #151c2c;
+            --border-color: #232d42;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #60a5fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        /* Persistent Demo Mode Badge */
+        .demo-badge {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header {
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Headline Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: border-color 0.2s ease;
+        }
+
+        .metric-card:hover {
+            border-color: #3b82f640;
+        }
+
+        .metric-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .metric-subtext {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .rate-definition {
+            display: inline-block;
+            background-color: #1e293b;
+            color: #60a5fa;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        /* Tooltip Container */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip-box {
+            visibility: hidden;
+            width: 220px;
+            background-color: #1e293b;
+            color: #f3f4f6;
+            text-align: left;
+            border-radius: 8px;
+            padding: 10px 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        .tooltip-container:hover .tooltip-box {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Sections */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .card-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #111827;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #1e293b50;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-temporary { background-color: #1e3a8a; color: #93c5fd; }
+        .badge-permanent { background-color: #312e81; color: #c7d2fe; }
+        .badge-repeated { background-color: #581c87; color: #e9d5ff; }
+        .badge-unknown { background-color: #374151; color: #d1d5db; }
+
+        .badge-approved { background-color: #065f46; color: #a7f3d0; }
+        .badge-blocked { background-color: #991b1b; color: #fecaca; }
+        .badge-succeeded { background-color: #065f46; color: #6ee7b7; }
+        .badge-failed-exec { background-color: #7f1d1d; color: #fca5a5; }
+        .badge-escalated { background-color: #7c2d12; color: #fdba74; }
+        .badge-stopped { background-color: #374151; color: #e5e7eb; }
+
+        /* Filter Controls */
+        .controls-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .select-control, .input-control {
+            background-color: #1e293b;
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .select-control:focus, .input-control:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-view {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-view:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Scenario & Reset Controls */
+        .scenario-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-scenario {
+            background-color: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #0284c7;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-scenario:hover {
+            background-color: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            box-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
+        }
+
+        /* Timeline Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 750px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        /* Timeline List */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            border-left: 2px solid var(--border-color);
+            margin-left: 12px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -31px;
+            top: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            border: 2px solid var(--card-bg);
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .timeline-event-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .timeline-details {
+            background-color: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        .timeline-details pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: monospace;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Persistent DEMO MODE Badge -->
+    <!-- Persistent DEMO MODE Badge -->
+    {% if demo_mode %}
+    <div class="demo-badge">
+        <span>⚡</span> DEMO MODE
+    </div>
+    {% endif %}
+
+    <!-- Tab Navigation Bar -->
+    <div class="tabs-nav" style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
+        <button id="tab-btn-loop1" class="tab-btn active" onclick="switchTab('loop1')" style="background-color: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Loop 1: Payment Recovery</button>
+        <button id="tab-btn-loop2" class="tab-btn" onclick="switchTab('loop2')" style="background-color: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Loop 2: Checkout Abandonment</button>
+    </div>
+
+    <!-- LOOP 1 VIEW CONTAINER -->
+    <div id="loop1-view">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Razorpay RecoverAI Merchant Dashboard</h1>
+                <p>Read-only display layer for batch payment recovery evaluation</p>
+            </div>
+            <div class="scenario-toolbar">
+                <button class="btn-scenario" onclick="runScenario('A')">🎬 Scenario A (Retry Success)</button>
+                <button class="btn-scenario" onclick="runScenario('B')">🎬 Scenario B (Escalation)</button>
+                <button class="btn-scenario" onclick="runScenario('C')">🎬 Scenario C (Full Batch)</button>
+                <button class="btn-reset" onclick="resetDatabase()">🔄 Instant Reset</button>
+            </div>
+        </div>
+
+        <!-- Headline Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Revenue At Risk -->
+            <div class="metric-card">
+                <div class="metric-title">Revenue At Risk (Uncaptured)</div>
+                <div class="metric-value" id="val-at-risk">₹0</div>
+                <div class="metric-subtext">Total value of payments that failed to complete.</div>
+            </div>
+
+            <!-- Revenue Recovered -->
+            <div class="metric-card">
+                <div class="metric-title">Revenue Recovered</div>
+                <div class="metric-value" id="val-recovered" style="color: var(--accent-green);">₹0</div>
+                <div class="metric-subtext">Revenue successfully captured via automated retry or recovery link, after initially failing.</div>
+            </div>
+
+            <!-- Recovery Rate -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    Recovery Rate
+                    <span class="rate-definition">Recovered ÷ At Risk</span>
+                </div>
+                <div class="metric-value" id="val-rate">0.00%</div>
+                <div class="metric-subtext">Percentage of uncaptured revenue successfully recovered.</div>
+            </div>
+
+            <!-- Escalated -->
+            <div class="metric-card tooltip-container">
+                <div class="metric-title">Escalated</div>
+                <div class="metric-value" id="val-escalated" style="color: var(--accent-amber);">0</div>
+                <div class="metric-subtext">Routed to human ops review. Hover for breakdown.</div>
+                <div class="tooltip-box">
+                    <div><strong>Escalation Breakdown:</strong></div>
+                    <div style="margin-top: 4px;">• Policy-Blocked: <span id="val-escalated-blocked">0</span></div>
+                    <div>• Policy-Approved: <span id="val-escalated-approved">0</span></div>
+                </div>
+            </div>
+
+            <!-- Unresolved -->
+            <div class="metric-card">
+                <div class="metric-title">Unresolved (Stopped)</div>
+                <div class="metric-value" id="val-unresolved" style="color: var(--text-muted);">0</div>
+                <div class="metric-subtext">Policy engine approved STOP recommendation due to high risk.</div>
+            </div>
+
+            <!-- Still Failed -->
+            <div class="metric-card">
+                <div class="metric-title">Still Failed</div>
+                <div class="metric-value" id="val-still-failed" style="color: var(--accent-red);">0</div>
+                <div class="metric-subtext">Retry attempted but payment remained unsuccessful.</div>
+            </div>
+        </div>
+
+        <!-- Category Breakdown Table -->
+        <div class="card-panel">
+            <h2 class="section-title">Category Breakdown</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Failure Category</th>
+                        <th>Count</th>
+                        <th>Revenue At Risk (INR)</th>
+                        <th>Revenue Recovered (INR)</th>
+                        <th>Category Recovery Rate (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="cat-table-body">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Recovery Actions List -->
+        <div class="card-panel">
+            <h2 class="section-title">Recent Recovery Actions List</h2>
+            
+            <div class="controls-row">
+                <input type="text" id="search-input" class="input-control" placeholder="Search Payment ID..." style="min-width: 220px;">
+                <select id="filter-category" class="select-control">
+                    <option value="ALL">All Categories</option>
+                    <option value="TEMPORARY">TEMPORARY</option>
+                    <option value="PERMANENT">PERMANENT</option>
+                    <option value="REPEATED_FAILURE">REPEATED_FAILURE</option>
+                    <option value="UNKNOWN">UNKNOWN</option>
+                </select>
+                <select id="filter-status" class="select-control">
+                    <option value="ALL">All Statuses</option>
+                    <option value="SUCCEEDED">SUCCEEDED</option>
+                    <option value="FAILED_EXECUTION">FAILED_EXECUTION</option>
+                    <option value="ESCALATED">ESCALATED</option>
+                    <option value="STOPPED">STOPPED</option>
+                </select>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Recommendation</th>
+                        <th>Policy Decision</th>
+                        <th>Action Taken</th>
+                        <th>Business Outcome</th>
+                        <th>Final Status</th>
+                        <th>Audit History</th>
+                    </tr>
+                </thead>
+                <tbody id="payments-table-body">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- END LOOP 1 VIEW CONTAINER -->
+
+    <!-- LOOP 2 VIEW CONTAINER -->
+    <div id="loop2-view" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Checkout Abandonment Recovery Dashboard</h1>
+                <p>Read-only display layer for uncaptured shopping cart abandonment recovery (Loop 2)</p>
+            </div>
+            <div class="scenario-toolbar">
+                <button class="btn-scenario" onclick="openCheckoutTimeline('chk_42_004')">🎬 Sample Converted (chk_42_004)</button>
+                <button class="btn-scenario" onclick="openCheckoutTimeline('chk_42_006')">🎬 Sample Escalated (chk_42_006)</button>
+            </div>
+        </div>
+
+        <!-- Headline Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Carts At Risk -->
+            <div class="metric-card">
+                <div class="metric-title">Carts At Risk (Uncaptured)</div>
+                <div class="metric-value" id="val-chk-at-risk">₹0</div>
+                <div class="metric-subtext">Total value of shopping carts abandoned before checkout completion.</div>
+            </div>
+
+            <!-- Carts Recovered -->
+            <div class="metric-card">
+                <div class="metric-title">Carts Recovered</div>
+                <div class="metric-value" id="val-chk-recovered" style="color: var(--accent-green);">₹0</div>
+                <div class="metric-subtext">Cart revenue successfully captured following automated reminder or discount nudge.</div>
+            </div>
+
+            <!-- Recovery Rate -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    Recovery Rate
+                    <span class="rate-definition">Recovered ÷ At Risk</span>
+                </div>
+                <div class="metric-value" id="val-chk-rate">0.00%</div>
+                <div class="metric-subtext">Percentage of uncaptured cart revenue successfully recovered.</div>
+            </div>
+
+            <!-- Escalated -->
+            <div class="metric-card tooltip-container">
+                <div class="metric-title">Escalated</div>
+                <div class="metric-value" id="val-chk-escalated" style="color: var(--accent-amber);">0</div>
+                <div class="metric-subtext">Routed to human ops review. Hover for breakdown.</div>
+                <div class="tooltip-box">
+                    <div><strong>Escalation Breakdown:</strong></div>
+                    <div style="margin-top: 4px;">• Policy-Blocked: <span id="val-chk-escalated-blocked">0</span></div>
+                    <div>• Policy-Approved: <span id="val-chk-escalated-approved">0</span></div>
+                </div>
+            </div>
+
+            <!-- Unresolved -->
+            <div class="metric-card">
+                <div class="metric-title">Unresolved (Stopped)</div>
+                <div class="metric-value" id="val-chk-unresolved" style="color: var(--text-muted);">0</div>
+                <div class="metric-subtext">Note: 0 because STALE_ABANDON checkouts were BLOCKED by Policy Engine and routed to ESCALATED rather than STOPPED.</div>
+            </div>
+        </div>
+
+        <!-- Category Breakdown Table -->
+        <div class="card-panel">
+            <h2 class="section-title">Category Breakdown</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Abandonment Category</th>
+                        <th>Count</th>
+                        <th>Carts At Risk (INR)</th>
+                        <th>Carts Recovered (INR)</th>
+                        <th>Category Recovery Rate (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="cat-chk-table-body">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Abandoned Checkouts List -->
+        <div class="card-panel">
+            <h2 class="section-title">Recent Abandoned Checkouts List</h2>
+            
+            <div class="controls-row">
+                <input type="text" id="search-chk-input" class="input-control" placeholder="Search Checkout ID..." style="min-width: 220px;">
+                <select id="filter-chk-category" class="select-control">
+                    <option value="ALL">All Categories</option>
+                    <option value="RECENT_ABANDON">RECENT_ABANDON</option>
+                    <option value="STALE_ABANDON">STALE_ABANDON</option>
+                    <option value="REPEAT_ABANDONER">REPEAT_ABANDONER</option>
+                    <option value="HIGH_VALUE_ABANDON">HIGH_VALUE_ABANDON</option>
+                    <option value="UNKNOWN_ABANDON">UNKNOWN_ABANDON</option>
+                </select>
+                <select id="filter-chk-status" class="select-control">
+                    <option value="ALL">All Statuses</option>
+                    <option value="SUCCEEDED">SUCCEEDED</option>
+                    <option value="ESCALATED">ESCALATED</option>
+                    <option value="STOPPED">STOPPED</option>
+                </select>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Checkout ID</th>
+                        <th>Cart Value</th>
+                        <th>Category</th>
+                        <th>Recommendation</th>
+                        <th>Policy Decision</th>
+                        <th>Action Taken</th>
+                        <th>Business Outcome</th>
+                        <th>Final Status</th>
+                        <th>Audit History</th>
+                    </tr>
+                </thead>
+                <tbody id="checkouts-table-body">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- END LOOP 2 VIEW CONTAINER -->
+
+    <!-- Audit Timeline Modal -->
+    <div class="modal-overlay" id="timeline-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Transaction Audit Timeline</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="timeline" id="timeline-container">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allPayments = [];
+        let allCheckouts = [];
+
+        function switchTab(tabName) {
+            const btnLoop1 = document.getElementById('tab-btn-loop1');
+            const btnLoop2 = document.getElementById('tab-btn-loop2');
+            const viewLoop1 = document.getElementById('loop1-view');
+            const viewLoop2 = document.getElementById('loop2-view');
+
+            if (tabName === 'loop1') {
+                btnLoop1.style.backgroundColor = 'var(--primary)';
+                btnLoop1.style.color = '#fff';
+                btnLoop1.style.border = 'none';
+
+                btnLoop2.style.backgroundColor = 'var(--card-bg)';
+                btnLoop2.style.color = 'var(--text-muted)';
+                btnLoop2.style.border = '1px solid var(--border-color)';
+
+                viewLoop1.style.display = 'block';
+                viewLoop2.style.display = 'none';
+            } else {
+                btnLoop2.style.backgroundColor = 'var(--primary)';
+                btnLoop2.style.color = '#fff';
+                btnLoop2.style.border = 'none';
+
+                btnLoop1.style.backgroundColor = 'var(--card-bg)';
+                btnLoop1.style.color = 'var(--text-muted)';
+                btnLoop1.style.border = '1px solid var(--border-color)';
+
+                viewLoop1.style.display = 'none';
+                viewLoop2.style.display = 'block';
+
+                fetchCheckoutMetrics();
+                fetchCheckouts();
+            }
+        }
+
+        async function fetchMetrics() {
+            try {
+                const resp = await fetch('/api/metrics');
+                const data = await resp.json();
+
+                document.getElementById('val-at-risk').innerText = '₹' + data.revenue_at_risk_inr.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                document.getElementById('val-recovered').innerText = '₹' + data.revenue_recovered_inr.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                document.getElementById('val-rate').innerText = data.recovery_rate_pct.toFixed(2) + '%';
+                document.getElementById('val-escalated').innerText = data.escalated_count;
+                document.getElementById('val-escalated-blocked').innerText = data.escalated_subbreakdown.blocked_then_escalated;
+                document.getElementById('val-escalated-approved').innerText = data.escalated_subbreakdown.recommended_and_approved_escalated;
+                document.getElementById('val-unresolved').innerText = data.unresolved_count;
+                document.getElementById('val-still-failed').innerText = data.still_failed_count;
+
+                // Category Table
+                const tbody = document.getElementById('cat-table-body');
+                tbody.innerHTML = '';
+
+                for (const [cat, d] of Object.entries(data.category_breakdown)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><span class="badge badge-${cat.toLowerCase().replace('_', '-')}">${cat}</span></td>
+                        <td>${d.count}</td>
+                        <td>₹${d.at_risk_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                        <td>₹${d.recovered_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                        <td><strong>${d.recovery_rate_pct.toFixed(2)}%</strong></td>
+                    `;
+                    tbody.appendChild(row);
+                }
+
+            } catch (err) {
+                console.error("Error fetching metrics:", err);
+            }
+        }
+
+        async function fetchPayments() {
+            try {
+                const resp = await fetch('/api/payments');
+                allPayments = await resp.json();
+                renderPayments();
+            } catch (err) {
+                console.error("Error fetching payments:", err);
+            }
+        }
+
+        function renderPayments() {
+            const search = document.getElementById('search-input').value.trim().toLowerCase();
+            const catFilter = document.getElementById('filter-category').value;
+            const statusFilter = document.getElementById('filter-status').value;
+
+            const tbody = document.getElementById('payments-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = allPayments.filter(p => {
+                if (search && !p.payment_id.toLowerCase().includes(search)) return false;
+                if (catFilter !== 'ALL' && p.category !== catFilter) return false;
+                if (statusFilter !== 'ALL' && p.status !== statusFilter) return false;
+                return true;
+            });
+
+            filtered.forEach(p => {
+                const tr = document.createElement('tr');
+                
+                let outcomeLabel = p.business_outcome || '-';
+                if (p.recovery_confirmed) {
+                    outcomeLabel += ' (converted)';
+                }
+
+                tr.innerHTML = `
+                    <td><strong>${p.payment_id}</strong></td>
+                    <td>₹${p.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                    <td><span class="badge badge-${p.category.toLowerCase().replace('_', '-')}">${p.category}</span></td>
+                    <td>${p.recommended_action || '-'}</td>
+                    <td><span class="badge badge-${p.policy_decision ? p.policy_decision.toLowerCase() : 'none'}">${p.policy_decision || '-'}</span></td>
+                    <td>${p.recommended_action || '-'}</td>
+                    <td>${outcomeLabel}</td>
+                    <td><span class="badge badge-${p.status.toLowerCase().replace('_', '-')}">${p.status}</span></td>
+                    <td><button class="btn-view" onclick="openTimeline('${p.payment_id}')">View Timeline</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ==============================================================================
+        // LOOP 2 JS FUNCTIONS
+        // ==============================================================================
+
+        async function fetchCheckoutMetrics() {
+            try {
+                const resp = await fetch('/api/checkout-metrics');
+                const data = await resp.json();
+
+                document.getElementById('val-chk-at-risk').innerText = '₹' + data.carts_at_risk_inr.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                document.getElementById('val-chk-recovered').innerText = '₹' + data.carts_recovered_inr.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                document.getElementById('val-chk-rate').innerText = data.recovery_rate.toFixed(2) + '%';
+                document.getElementById('val-chk-escalated').innerText = data.escalated_count;
+                document.getElementById('val-chk-escalated-blocked').innerText = data.policy_blocked_escalated_cnt;
+                document.getElementById('val-chk-escalated-approved').innerText = data.direct_approved_escalated_cnt;
+                document.getElementById('val-chk-unresolved').innerText = data.unresolved_count;
+
+                // Loop 2 Category Table
+                const tbody = document.getElementById('cat-chk-table-body');
+                tbody.innerHTML = '';
+
+                for (const [cat, d] of Object.entries(data.category_metrics)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><span class="badge badge-${cat.toLowerCase().replace('_', '-')}">${cat}</span></td>
+                        <td>${d.count}</td>
+                        <td>₹${d.at_risk_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                        <td>₹${d.recovered_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                        <td><strong>${d.recovery_rate.toFixed(2)}%</strong></td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            } catch (err) {
+                console.error("Error fetching checkout metrics:", err);
+            }
+        }
+
+        async function fetchCheckouts() {
+            try {
+                const resp = await fetch('/api/checkouts');
+                allCheckouts = await resp.json();
+                renderCheckouts();
+            } catch (err) {
+                console.error("Error fetching checkouts:", err);
+            }
+        }
+
+        function renderCheckouts() {
+            const search = document.getElementById('search-chk-input').value.trim().toLowerCase();
+            const catFilter = document.getElementById('filter-chk-category').value;
+            const statusFilter = document.getElementById('filter-chk-status').value;
+
+            const tbody = document.getElementById('checkouts-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = allCheckouts.filter(c => {
+                if (search && !c.checkout_id.toLowerCase().includes(search)) return false;
+                if (catFilter !== 'ALL' && c.category !== catFilter) return false;
+                if (statusFilter !== 'ALL' && c.status !== statusFilter) return false;
+                return true;
+            });
+
+            filtered.forEach(c => {
+                const tr = document.createElement('tr');
+                
+                let outcomeLabel = c.business_outcome || '-';
+                if (c.cart_recovery_confirmed) {
+                    outcomeLabel += ' (converted)';
+                }
+
+                tr.innerHTML = `
+                    <td><strong>${c.checkout_id}</strong></td>
+                    <td>₹${c.cart_value_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                    <td><span class="badge badge-${c.category.toLowerCase().replace('_', '-')}">${c.category}</span></td>
+                    <td>${c.recommended_action || '-'}</td>
+                    <td><span class="badge badge-${c.policy_decision ? c.policy_decision.toLowerCase() : 'none'}">${c.policy_decision || '-'}</span></td>
+                    <td>${c.action_taken || '-'}</td>
+                    <td>${outcomeLabel}</td>
+                    <td><span class="badge badge-${c.status.toLowerCase().replace('_', '-')}">${c.status}</span></td>
+                    <td><button class="btn-view" onclick="openCheckoutTimeline('${c.checkout_id}')">View Timeline</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function openCheckoutTimeline(checkoutId) {
+            document.getElementById('modal-title').innerText = `Checkout Audit Timeline (${checkoutId})`;
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '<p style="color: var(--text-muted);">Loading checkout timeline...</p>';
+
+            document.getElementById('timeline-modal').classList.add('active');
+
+            try {
+                const resp = await fetch(`/api/checkouts/${checkoutId}/timeline`);
+                const timeline = await resp.json();
+
+                container.innerHTML = '';
+                timeline.forEach(evt => {
+                    const item = document.createElement('div');
+                    item.className = 'timeline-item';
+
+                    let detailsHtml = '';
+                    if (evt.event_type === 'ABANDONED') {
+                        detailsHtml = `Checkout Abandoned. Cart Value: ₹${evt.cart_value_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+                    } else if (evt.event_type === 'CLASSIFIED') {
+                        detailsHtml = `Deterministic Category Classification: <strong>${evt.category}</strong>`;
+                    } else if (evt.event_type === 'RECOMMENDED') {
+                        detailsHtml = `LLM Recommendation: <strong>${evt.recommended_action}</strong>`;
+                    } else if (evt.event_type === 'POLICY_DECISION') {
+                        detailsHtml = `Policy Decision: <strong>${evt.policy_decision}</strong><br>Reason: <em>${evt.policy_reason}</em>`;
+                    } else if (evt.event_type === 'ACTION_EXECUTED') {
+                        let outcomeLabel = evt.business_outcome || '-';
+                        if (evt.cart_recovery_confirmed) {
+                            outcomeLabel += ' (converted)';
+                        }
+                        detailsHtml = `Action Taken: <strong>${evt.action_taken}</strong><br>Execution Result: ${evt.execution_result}<br>Business Outcome: <strong>${outcomeLabel}</strong>`;
+                    }
+
+                    item.innerHTML = `
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">${evt.timestamp}</div>
+                        <div class="timeline-event-title">${evt.event_type}</div>
+                        <div class="timeline-details">${detailsHtml}</div>
+                    `;
+                    container.appendChild(item);
+                });
+
+            } catch (err) {
+                container.innerHTML = '<p style="color: var(--accent-red);">Error loading checkout timeline details.</p>';
+            }
+        }
+
+        async function openTimeline(paymentId) {
+            document.getElementById('modal-title').innerText = `Transaction Audit Timeline (${paymentId})`;
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '<p style="color: var(--text-muted);">Loading timeline...</p>';
+
+            document.getElementById('timeline-modal').classList.add('active');
+
+            try {
+                const resp = await fetch(`/api/payments/${paymentId}/timeline`);
+                const timeline = await resp.json();
+
+                container.innerHTML = '';
+                timeline.forEach(evt => {
+                    const item = document.createElement('div');
+                    item.className = 'timeline-item';
+
+                    let detailsHtml = '';
+                    if (evt.event_type === 'PAYMENT_FAILED') {
+                        detailsHtml = `Initial failed payment ingested. Amount: ₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}, Attempt #: ${evt.attempt_number}`;
+                    } else if (evt.event_type === 'CLASSIFIED') {
+                        detailsHtml = `Deterministic Category Classification: <strong>${evt.category}</strong>`;
+                    } else if (evt.event_type === 'RECOMMENDED') {
+                        detailsHtml = `LLM Recommendation: <strong>${evt.recommended_action}</strong>`;
+                    } else if (evt.event_type === 'POLICY_DECISION') {
+                        detailsHtml = `Policy Decision: <strong>${evt.policy_decision}</strong><br>Reason: <em>${evt.policy_reason}</em>`;
+                    } else if (evt.event_type === 'ACTION_EXECUTED') {
+                        detailsHtml = `Action Taken: <strong>${evt.action_taken}</strong><br>Execution Result: ${evt.execution_result}<br>Business Outcome: <strong>${evt.business_outcome}</strong>`;
+                    }
+
+                    item.innerHTML = `
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">${evt.timestamp}</div>
+                        <div class="timeline-event-title">${evt.event_type}</div>
+                        <div class="timeline-details">${detailsHtml}</div>
+                    `;
+                    container.appendChild(item);
+                });
+
+            } catch (err) {
+                container.innerHTML = '<p style="color: var(--accent-red);">Error loading timeline details.</p>';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('timeline-modal').classList.remove('active');
+        }
+
+        async function resetDatabase() {
+            try {
+                const resp = await fetch('/api/reset', { method: 'POST' });
+                const res = await resp.json();
+                if (res.status === 'success') {
+                    await fetchMetrics();
+                    await fetchPayments();
+                    alert('⚡ Database successfully restored from verified snapshot!');
+                } else {
+                    alert('Reset Error: ' + res.message);
+                }
+            } catch (err) {
+                alert('Failed to reset database: ' + err);
+            }
+        }
+
+        function runScenario(scen) {
+            if (scen === 'A') {
+                openTimeline('pay_42_009');
+            } else if (scen === 'B') {
+                openTimeline('pay_42_001');
+            } else if (scen === 'C') {
+                document.getElementById('search-input').value = '';
+                document.getElementById('filter-category').value = 'ALL';
+                document.getElementById('filter-status').value = 'ALL';
+                renderPayments();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', renderPayments);
+        document.getElementById('filter-category').addEventListener('change', renderPayments);
+        document.getElementById('filter-status').addEventListener('change', renderPayments);
+
+        document.getElementById('search-chk-input').addEventListener('input', renderCheckouts);
+        document.getElementById('filter-chk-category').addEventListener('change', renderCheckouts);
+        document.getElementById('filter-chk-status').addEventListener('change', renderCheckouts);
+
+        fetchMetrics();
+        fetchPayments();
+    </script>
+</body>
+</html>

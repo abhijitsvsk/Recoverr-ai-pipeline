@@ -1,0 +1,16 @@
+# Environment variables & secrets
+.env
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Databases & local test snapshots
+*.db
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp

@@ -464,6 +464,7 @@
                 <p>Read-only display layer for batch payment recovery evaluation</p>
             </div>
             <div class="scenario-toolbar">
+                <button id="btn-sim-payment" class="btn-scenario" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border-color: #3b82f6;" onclick="simulatePaymentFailure()">⚡ Simulate Failed Payment</button>
                 <button class="btn-scenario" onclick="runScenario('A')">🎬 Scenario A (Retry Success)</button>
                 <button class="btn-scenario" onclick="runScenario('B')">🎬 Scenario B (Escalation)</button>
                 <button class="btn-scenario" onclick="runScenario('C')">🎬 Scenario C (Full Batch)</button>
@@ -596,6 +597,7 @@
                 <p>Read-only display layer for uncaptured shopping cart abandonment recovery (Loop 2)</p>
             </div>
             <div class="scenario-toolbar">
+                <button id="btn-sim-checkout" class="btn-scenario" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border-color: #3b82f6;" onclick="simulateCheckoutAbandonment()">⚡ Simulate Cart Abandonment</button>
                 <button class="btn-scenario" onclick="openCheckoutTimeline('chk_42_004')">🎬 Sample Converted (chk_42_004)</button>
                 <button class="btn-scenario" onclick="openCheckoutTimeline('chk_42_006')">🎬 Sample Escalated (chk_42_006)</button>
             </div>
@@ -1050,6 +1052,62 @@
                 document.getElementById('filter-status').value = 'ALL';
                 renderPayments();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        async function simulatePaymentFailure() {
+            const btn = document.getElementById('btn-sim-payment');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Processing Pipeline...';
+            btn.style.opacity = '0.75';
+
+            try {
+                const resp = await fetch('/api/simulate-payment-failure', { method: 'POST' });
+                const res = await resp.json();
+
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+
+                if (res.status === 'success') {
+                    await openTimeline(res.payment_id);
+                } else {
+                    alert('Simulation Error: ' + (res.message || 'Unknown failure'));
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                alert('Simulation failed: ' + err);
+            }
+        }
+
+        async function simulateCheckoutAbandonment() {
+            const btn = document.getElementById('btn-sim-checkout');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Processing Pipeline...';
+            btn.style.opacity = '0.75';
+
+            try {
+                const resp = await fetch('/api/simulate-checkout-abandonment', { method: 'POST' });
+                const res = await resp.json();
+
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+
+                if (res.status === 'success') {
+                    await openCheckoutTimeline(res.checkout_id);
+                } else {
+                    alert('Simulation Error: ' + (res.message || 'Unknown failure'));
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                alert('Simulation failed: ' + err);
             }
         }
 

@@ -28,6 +28,14 @@ import checkout_recommender
 import checkout_policy_engine
 import checkout_action_executor
 
+import dup_db
+import dup_classifier
+import dup_recommender
+import dup_policy_engine
+import dup_action_executor
+import dup_metrics_aggregator
+from dup_db import get_dup_connection, DEFAULT_DUP_DB_PATH, LIVE_TEST_DUP_DB_PATH
+
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # Protected Baseline Databases (NEVER written to by interactive live simulations)
@@ -493,6 +501,138 @@ def simulate_checkout_abandonment():
         "execution_result": r["execution_result"] if r else "NONE",
         "business_outcome": r["business_outcome"] if r else "NONE",
         "final_status": r["status"] if r else "UNKNOWN"
+    })
+
+
+@app.route("/api/dup-metrics")
+def get_dup_metrics():
+    db_path = LIVE_TEST_DUP_DB_PATH if os.path.exists(LIVE_TEST_DUP_DB_PATH) else DEFAULT_DUP_DB_PATH
+    return jsonify(dup_metrics_aggregator.compute_dup_metrics(db_path))
+
+
+@app.route("/api/dup-charges")
+def get_dup_charges():
+    db_path = LIVE_TEST_DUP_DB_PATH if os.path.exists(LIVE_TEST_DUP_DB_PATH) else DEFAULT_DUP_DB_PATH
+    dup_db.init_dup_db(db_path)
+    conn = get_dup_connection(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, customer_id, order_id, card_id, amount_in_paise, time_delta_seconds, prior_duplicate_count, purchase_type, category, status, action_taken, business_outcome, created_at
+        FROM duplicate_charges ORDER BY created_at DESC;
+    """)
+    rows = cursor.fetchall()
+    conn.close()
+    res = []
+    for r in rows:
+        d = dict(r)
+        d["amount_in_inr"] = d["amount_in_paise"] / 100.0
+        res.append(d)
+    return jsonify(res)
+
+
+@app.route("/api/dup-charges/<charge_id>/timeline")
+def get_dup_timeline(charge_id):
+    db_path = LIVE_TEST_DUP_DB_PATH if os.path.exists(LIVE_TEST_DUP_DB_PATH) else DEFAULT_DUP_DB_PATH
+    conn = get_dup_connection(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, event_id, event_type, charge_id, timestamp, amount_in_paise, category, recommended_action, policy_decision, policy_reason, action_taken, execution_result, business_outcome
+        FROM dup_audit_log WHERE charge_id = ? ORDER BY timestamp ASC;
+    """, (charge_id,))
+    rows = cursor.fetchall()
+    conn.close()
+    res = []
+    for r in rows:
+        d = dict(r)
+        d["amount_in_inr"] = d["amount_in_paise"] / 100.0
+        res.append(d)
+    return jsonify(res)
+
+
+@app.route("/api/simulate-duplicate-charge", methods=["POST"])
+def simulate_duplicate_charge():
+    start_t = time.perf_counter()
+    db_path = LIVE_TEST_DUP_DB_PATH
+    dup_db.init_dup_db(db_path)
+
+    loop3_scenarios = [
+        {"ground_truth_category": "EXACT_DUPLICATE", "amount_in_paise": 49900, "time_delta_seconds": 120, "prior_duplicate_count": 0, "purchase_type": "accidental_double_click"},
+        {"ground_truth_category": "LIKELY_DUPLICATE", "amount_in_paise": 199900, "time_delta_seconds": 15, "prior_duplicate_count": 0, "purchase_type": "rapid_recheckout"},
+        {"ground_truth_category": "EXACT_DUPLICATE", "amount_in_paise": 5500000, "time_delta_seconds": 300, "prior_duplicate_count": 0, "purchase_type": "high_value_double_charge"},
+        {"ground_truth_category": "SUSPECTED_DUPLICATE", "amount_in_paise": 250000, "time_delta_seconds": 180, "prior_duplicate_count": 0, "purchase_type": "multi_instrument_retry"},
+        {"ground_truth_category": "EXACT_DUPLICATE", "amount_in_paise": 89900, "time_delta_seconds": 60, "prior_duplicate_count": 3, "purchase_type": "repeat_fraud_pattern"},
+        {"ground_truth_category": "UNRELATED", "amount_in_paise": 49900, "time_delta_seconds": 3, "prior_duplicate_count": 0, "purchase_type": "in_game_microtransaction_legit"},
+    ]
+
+    scen_idx = request.args.get("scenario_index")
+    if scen_idx is None and request.is_json and request.json:
+        scen_idx = request.json.get("scenario_index")
+    if scen_idx is not None:
+        try:
+            scen = loop3_scenarios[int(scen_idx)]
+        except (IndexError, ValueError):
+            scen = random.choice(loop3_scenarios)
+    else:
+        scen = random.choice(loop3_scenarios)
+
+    cid = f"chg_sim_{int(time.time())}_{random.randint(100, 999)}"
+    now_str = datetime.now(timezone.utc).isoformat()
+
+    conn = get_dup_connection(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO duplicate_charges (
+            id, customer_id, order_id, card_id, amount_in_paise, time_delta_seconds, prior_duplicate_count, purchase_type, ground_truth_category, status, created_at, updated_at
+        ) VALUES (?, 'cust_sim_101', 'ord_sim_101', 'card_sim_101', ?, ?, ?, ?, ?, 'INGESTED', ?, ?);
+    """, (cid, scen["amount_in_paise"], scen["time_delta_seconds"], scen["prior_duplicate_count"], scen["purchase_type"], scen["ground_truth_category"], now_str, now_str))
+
+    cursor.execute("""
+        INSERT INTO dup_audit_log (
+            id, event_id, event_type, charge_id, timestamp, amount_in_paise, action_taken, execution_result, business_outcome
+        ) VALUES (?, ?, 'CHARGE_INGESTED', ?, ?, ?, 'INGEST', 'ingested', 'pending_classification');
+    """, (f"aud_ingest_{cid}", f"evt_ingest_{cid}", cid, now_str, scen["amount_in_paise"]))
+
+    cursor.execute("""
+        INSERT INTO dup_idempotency (event_id, charge_id, processed_at) VALUES (?, ?, ?);
+    """, (f"evt_ingest_{cid}", cid, now_str))
+
+    conn.commit()
+    conn.close()
+
+    dup_classifier.process_dup_classification_pipeline(db_path)
+    dup_recommender.process_dup_recommendation_pipeline(db_path)
+    dup_policy_engine.process_dup_policy_pipeline(db_path)
+    dup_action_executor.process_dup_action_pipeline(db_path)
+
+    elapsed_s = round(time.perf_counter() - start_t, 2)
+
+    conn = get_dup_connection(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT c.category, c.recommended_action, c.recommendation_reason, c.status,
+               pol.policy_decision, pol.policy_reason,
+               act.action_taken, act.execution_result, act.business_outcome
+        FROM duplicate_charges c
+        LEFT JOIN dup_audit_log pol ON c.id = pol.charge_id AND pol.event_type = 'POLICY_DECISION'
+        LEFT JOIN dup_audit_log act ON c.id = act.charge_id AND act.event_type = 'ACTION_EXECUTED'
+        WHERE c.id = ?;
+    """, (cid,))
+    r = cursor.fetchone()
+    conn.close()
+
+    return jsonify({
+        "status": "success",
+        "charge_id": cid,
+        "elapsed_seconds": elapsed_s,
+        "category": r["category"] if r else None,
+        "recommended_action": r["recommended_action"] if r else None,
+        "recommendation_reason": r["recommendation_reason"] if r else None,
+        "policy_decision": r["policy_decision"] if r else None,
+        "policy_reason": r["policy_reason"] if r else None,
+        "action_taken": r["action_taken"] if r else None,
+        "execution_result": r["execution_result"] if r else None,
+        "business_outcome": r["business_outcome"] if r else None,
+        "final_status": r["status"] if r else None,
     })
 
 

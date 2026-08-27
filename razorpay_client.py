@@ -66,7 +66,7 @@ class RazorpayClient:
         return f"Basic {encoded}"
 
     def _make_request(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None
+        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, extra_headers: Optional[Dict[str, str]] = None
     ) -> Dict[str, Any]:
         url = f"{self.base_url}{endpoint}"
         headers = {
@@ -74,6 +74,8 @@ class RazorpayClient:
             "Content-Type": "application/json",
             "User-Agent": "RecoverAI-Razorpay-Client/1.0",
         }
+        if extra_headers:
+            headers.update(extra_headers)
 
         body_bytes = json.dumps(data).encode("utf-8") if data else None
         req = urllib.request.Request(url, data=body_bytes, headers=headers, method=method)
@@ -141,3 +143,18 @@ class RazorpayClient:
     def get_payment(self, payment_id: str) -> Dict[str, Any]:
         """Fetch payment details via Razorpay Payments API: GET /v1/payments/{payment_id}"""
         return self._make_request("GET", f"/payments/{payment_id}")
+
+    def capture_payment(self, payment_id: str, amount_in_paise: int, currency: str = "INR") -> Dict[str, Any]:
+        """Capture an authorized payment: POST /v1/payments/{payment_id}/capture"""
+        payload = {"amount": amount_in_paise, "currency": currency}
+        return self._make_request("POST", f"/payments/{payment_id}/capture", payload)
+
+    def create_refund(
+        self, payment_id: str, amount_in_paise: int, idempotency_key: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Create a refund for a captured payment via Razorpay API: POST /v1/refunds"""
+        payload = {"payment_id": payment_id, "amount": amount_in_paise}
+        extra_headers = {}
+        if idempotency_key:
+            extra_headers["X-Refund-Idempotency"] = idempotency_key
+        return self._make_request("POST", "/refunds", payload, extra_headers=extra_headers)

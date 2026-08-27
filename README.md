@@ -4,7 +4,7 @@
 [![Python 3.13](https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python)](https://python.org)
 [![Razorpay REST API](https://img.shields.io/badge/Razorpay-REST%20API%20Test%20Mode-blue?style=for-the-badge&logo=razorpay)](https://razorpay.com)
 [![Architecture](https://img.shields.io/badge/Policy%20Engine-Deterministic%20Governance-success?style=for-the-badge)]()
-[![Audit Logging](https://img.shields.io/badge/Audit%20Log-DB--Level%20Immutable-orange?style=for-the-badge)]()
+[![Audit Logging](https://img.shields.io/badge/Audit%20Log-App--Enforced%20Append--Only-orange?style=for-the-badge)]()
 
 **RecoverAI** is an enterprise-grade, policy-governed AI revenue recovery platform built for the **Razorpay Buildathon (Track 03)**. It solves uncaptured revenue loss across two distinct, fully isolated recovery pipelines:
 
@@ -26,7 +26,7 @@ flowchart TD
     C --> D[3. Policy Engine\nDeterministic Governance & Hard Overrides]
     D -->|APPROVED| E[4. Action Executor\nRazorpay REST API / Slack Webhooks]
     D -->|BLOCKED| F[Route to ESCALATED\nHuman Ops Review]
-    E --> G[5. Verification & Immutable Audit Log\nSQLite Append-Only Ledger]
+    E --> G[5. Verification & Application-Enforced Append-Only Audit Log\nSQLite Trigger Protection]
     F --> G
 ```
 
@@ -83,7 +83,7 @@ Any payment or checkout cart exceeding `HIGH_VALUE_THRESHOLD_INR` (₹10,000 / 1
 ### 3. Business Outcome vs. Execution Result Separation
 The system tracks technical API success (`execution_result`) separately from financial recovery (`business_outcome`). A retry API returning `HTTP 200 OK` is logged as `simulated`/`order_created`, but `business_outcome` is marked as `recovered` **only after independent payment status verification**.
 
-### 4. Database-Level Immutability & Idempotency
+### 4. Application-Enforced Append-Only Audit Log & Idempotency
 - **SQLite Triggers**: Triggers `audit_log_no_update` and `audit_log_no_delete` reject any `UPDATE` or `DELETE` attempt on audit logs with a `sqlite3.IntegrityError`.
 - **Idempotency Locks**: All webhooks and action triggers enforce `PRIMARY KEY / UNIQUE` constraints on `event_id` to prevent duplicate recovery actions.
 

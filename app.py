@@ -310,6 +310,10 @@ def simulate_payment_failure():
     """
     Simulate a new payment failure record in recover_ai_live_test.db ONLY.
     Guarantees recover_ai.db and recover_ai_verified_snapshot.db remain 100% untouched.
+
+    Note on Simulation Latency: This endpoint synchronously invokes a real local 7B LLM (mistral:latest).
+    This is intentional for demo transparency to showcase real model latency rather than canned responses;
+    in production, this pipeline would be processed asynchronously via a background task queue.
     """
     start_t = time.perf_counter()
     db_path = LIVE_TEST_DB_PATH

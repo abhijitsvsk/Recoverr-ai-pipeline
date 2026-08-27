@@ -43,11 +43,11 @@ Respond ONLY with valid JSON in this exact structure:
 """
 
 
-def call_dup_llm(context: Dict[str, Any]) -> Tuple[str, str]:
+def call_dup_llm(context: Dict[str, Any], use_llm: bool = False) -> Tuple[str, str]:
     cat = context["category"]
     prior = context.get("prior_duplicate_count", 0)
 
-    # Heuristic default fallback
+    # Heuristic candidate recommendation
     if prior >= 2:
         default_act = DupAction.ESCALATE_AS_FRAUD.value
         default_reason = "Customer has 2+ prior duplicate flags; suspect repeat fraud pattern."
@@ -64,6 +64,9 @@ def call_dup_llm(context: Dict[str, Any]) -> Tuple[str, str]:
         default_act = DupAction.NO_ACTION.value
         default_reason = "Legitimate distinct purchase pattern (unrelated charges)."
 
+    if not use_llm:
+        return default_act, default_reason
+
     try:
         url = "http://127.0.0.1:11434/api/generate"
         prompt_text = DUP_PROMPT_TEMPLATE.format(**context)
@@ -78,7 +81,7 @@ def call_dup_llm(context: Dict[str, Any]) -> Tuple[str, str]:
             data=json.dumps(payload).encode("utf-8"),
             headers={"Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=12) as response:
+        with urllib.request.urlopen(req, timeout=5) as response:
             res_json = json.loads(response.read().decode("utf-8"))
             parsed = json.loads(res_json.get("response", "{}"))
             act = parsed.get("recommended_action", default_act)
@@ -91,7 +94,7 @@ def call_dup_llm(context: Dict[str, Any]) -> Tuple[str, str]:
     return default_act, default_reason
 
 
-def process_dup_recommendation_pipeline(db_path: str = "duplicate_charge.db") -> List[Dict[str, Any]]:
+def process_dup_recommendation_pipeline(db_path: str = "duplicate_charge.db", use_llm: bool = False) -> List[Dict[str, Any]]:
     conn = get_dup_connection(db_path)
     cursor = conn.cursor()
 
@@ -121,7 +124,7 @@ def process_dup_recommendation_pipeline(db_path: str = "duplicate_charge.db") ->
             "purchase_type": r["purchase_type"],
         }
 
-        rec_act, rec_reason = call_dup_llm(ctx)
+        rec_act, rec_reason = call_dup_llm(ctx, use_llm=use_llm)
 
         cursor.execute(
             """

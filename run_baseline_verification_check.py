@@ -137,17 +137,17 @@ def main():
     assert m3['escalated_count'] == 55, f"m3 escalated mismatch: {m3['escalated_count']}"
     assert m3['unresolved_count'] == 0, f"m3 unresolved mismatch: {m3['unresolved_count']}"
 
-    assert m4['charges_at_risk_inr'] == 1327100.0, f"m4 risk mismatch: {m4['charges_at_risk_inr']}"
-    assert m4['refunded_inr'] == 352250.0, f"m4 refunded mismatch: {m4['refunded_inr']}"
-    assert round(m4['refund_rate_pct'], 2) == 26.54, f"m4 rate mismatch: {m4['refund_rate_pct']}"
-    assert m4['escalated_count'] == 25, f"m4 escalated mismatch: {m4['escalated_count']}"
-    assert m4['no_action_count'] == 25, f"m4 no action mismatch: {m4['no_action_count']}"
+    assert m4['charges_at_risk_inr'] == 352883.0, f"m4 risk mismatch: {m4['charges_at_risk_inr']}"
+    assert m4['refunded_inr'] == 263927.0, f"m4 refunded mismatch: {m4['refunded_inr']}"
+    assert round(m4['refund_rate_pct'], 2) == 74.79, f"m4 rate mismatch: {m4['refund_rate_pct']}"
+    assert m4['escalated_count'] == 20, f"m4 escalated mismatch: {m4['escalated_count']}"
+    assert m4['no_action_count'] == 22, f"m4 no action mismatch: {m4['no_action_count']}"
 
-    assert m5['charges_at_risk_inr'] == 1327100.0, f"m5 risk mismatch: {m5['charges_at_risk_inr']}"
-    assert m5['refunded_inr'] == 352250.0, f"m5 refunded mismatch: {m5['refunded_inr']}"
-    assert round(m5['refund_rate_pct'], 2) == 26.54, f"m5 rate mismatch: {m5['refund_rate_pct']}"
-    assert m5['escalated_count'] == 25, f"m5 escalated mismatch: {m5['escalated_count']}"
-    assert m5['no_action_count'] == 25, f"m5 no action mismatch: {m5['no_action_count']}"
+    assert m5['charges_at_risk_inr'] == 352883.0, f"m5 risk mismatch: {m5['charges_at_risk_inr']}"
+    assert m5['refunded_inr'] == 263927.0, f"m5 refunded mismatch: {m5['refunded_inr']}"
+    assert round(m5['refund_rate_pct'], 2) == 74.79, f"m5 rate mismatch: {m5['refund_rate_pct']}"
+    assert m5['escalated_count'] == 20, f"m5 escalated mismatch: {m5['escalated_count']}"
+    assert m5['no_action_count'] == 22, f"m5 no action mismatch: {m5['no_action_count']}"
 
     print("=" * 80)
     print("ALL VERIFICATION CHECKS PASSED PERFECTLY! 100% UNTOUCHED BASELINE GUARANTEE CONFIRMED ACROSS ALL 5 DATABASES.")

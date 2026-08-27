@@ -259,8 +259,8 @@ def process_recommendation_pipeline(db_path: str = "recover_ai.db") -> Dict[str,
                 (action, reason, PaymentStatus.RECOMMENDED.value, now_str, payment_id),
             )
 
-            audit_id = f"aud_rec_{payment_id}"
-            event_id = f"evt_rec_{payment_id}"
+            audit_id = f"aud_rec_{payment_id}_{random.randint(1000, 9999)}"
+            event_id = f"evt_rec_{payment_id}_{random.randint(1000, 9999)}"
 
             cursor.execute(
                 """

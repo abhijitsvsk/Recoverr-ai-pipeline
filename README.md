@@ -126,9 +126,14 @@ Open `http://127.0.0.1:5000` in your browser to explore:
 
 ### 4. Run Live Razorpay Test Harness
 ```bash
+# Loop 1 & 2 Live REST API Test
 python run_razorpay_live_test.py
+
+# Loop 3 Live Refund REST API Test
+python run_dup_razorpay_live_test.py
 ```
-Executes real HTTP requests against Razorpay Test Mode REST API endpoints, generating live order resources (`order_*`) and payment links (`plink_*`).
+Executes real HTTP requests against Razorpay Test Mode REST API endpoints, generating live order resources (`order_*`), payment links (`plink_*`), and testing refund endpoints with `X-Refund-Idempotency` headers.  
+*Note on Live Scope*: Live order creation and refund header authentication are proven live via API. Full end-to-end refund execution requires authorized payment IDs generated through interactive browser Checkout UI submission, which is documented out of scope for pure server-side API testing (same known structural boundary as Loop 1 retry capture).
 
 ### 5. Run Full Benchmark Pipeline Runners
 ```bash

@@ -28,7 +28,7 @@ def run_full_dup_pipeline():
     process_dup_classification_pipeline(DB_PATH)
 
     # Step 3: Recommend
-    process_dup_recommendation_pipeline(DB_PATH)
+    process_dup_recommendation_pipeline(DB_PATH, use_llm=False)
 
     # Step 4: Policy Engine
     process_dup_policy_pipeline(DB_PATH)

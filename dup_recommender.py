@@ -43,7 +43,7 @@ Respond ONLY with valid JSON in this exact structure:
 """
 
 
-def call_dup_llm(context: Dict[str, Any], use_llm: bool = False) -> Tuple[str, str]:
+def call_dup_llm(context: Dict[str, Any], use_llm: bool = True) -> Tuple[str, str]:
     cat = context["category"]
     prior = context.get("prior_duplicate_count", 0)
 
@@ -81,7 +81,7 @@ def call_dup_llm(context: Dict[str, Any], use_llm: bool = False) -> Tuple[str, s
             data=json.dumps(payload).encode("utf-8"),
             headers={"Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=5) as response:
+        with urllib.request.urlopen(req, timeout=12) as response:
             res_json = json.loads(response.read().decode("utf-8"))
             parsed = json.loads(res_json.get("response", "{}"))
             act = parsed.get("recommended_action", default_act)
@@ -94,7 +94,7 @@ def call_dup_llm(context: Dict[str, Any], use_llm: bool = False) -> Tuple[str, s
     return default_act, default_reason
 
 
-def process_dup_recommendation_pipeline(db_path: str = "duplicate_charge.db", use_llm: bool = False) -> List[Dict[str, Any]]:
+def process_dup_recommendation_pipeline(db_path: str = "duplicate_charge.db", use_llm: bool = True) -> List[Dict[str, Any]]:
     conn = get_dup_connection(db_path)
     cursor = conn.cursor()
 

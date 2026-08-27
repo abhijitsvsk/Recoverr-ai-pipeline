@@ -436,6 +436,43 @@
             font-size: 12px;
             color: #9ca3af;
             margin-top: 6px;
+        /* WhatsApp & Slack Channel Delivery Preview Cards */
+        .whatsapp-bubble {
+            background-color: #0b141a;
+            border: 1px solid #1f2c34;
+            border-left: 4px solid #25d366;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #e9edef;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .whatsapp-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            color: #25d366;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .whatsapp-body {
+            line-height: 1.45;
+            color: #d1d5db;
+        }
+
+        .whatsapp-link {
+            display: inline-block;
+            margin-top: 6px;
+            color: #53bdeb;
+            text-decoration: underline;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -962,6 +999,36 @@
                             outcomeLabel += ' (converted)';
                         }
                         detailsHtml = `Action Taken: <strong>${evt.action_taken}</strong><br>Execution Result: ${evt.execution_result}<br>Business Outcome: <strong>${outcomeLabel}</strong>`;
+
+                        if (evt.action_taken === 'SEND_CART_REMINDER') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble">
+                                    <div class="whatsapp-header">💬 WhatsApp Delivery Preview</div>
+                                    <div class="whatsapp-body">
+                                        Hi Ananya! 🛍️ You left items worth <strong>₹${evt.cart_value_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong> in your cart. Tap here to complete your purchase:<br>
+                                        <span class="whatsapp-link">https://rzp.io/rzp/cart_chk_42</span>
+                                    </div>
+                                </div>`;
+                        } else if (evt.action_taken === 'SEND_DISCOUNT_NUDGE') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble">
+                                    <div class="whatsapp-header">💬 WhatsApp Delivery Preview</div>
+                                    <div class="whatsapp-body">
+                                        Hi Ananya! 🎉 Complete your purchase of ₹${evt.cart_value_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})} with an exclusive 10% discount! Code: <strong>RECOVER10</strong><br>
+                                        <span class="whatsapp-link">https://rzp.io/rzp/nudge_chk_42</span>
+                                    </div>
+                                </div>`;
+                        } else if (evt.action_taken === 'ESCALATE') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble" style="border-left-color: #e01e5a; background-color: #1a0d18;">
+                                    <div class="whatsapp-header" style="color: #e01e5a;">📢 Slack Escalation Alert (#cart-escalations)</div>
+                                    <div class="whatsapp-body">
+                                        <strong>⚠️ Checkout Abandonment Escalation Required</strong><br>
+                                        Cart Value: ₹${evt.cart_value_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})} | Category: <code>${evt.category || 'REPEAT_ABANDONER'}</code><br>
+                                        <em>Reason: ${evt.policy_reason || 'Policy Engine blocked auto-nudge; routed to human ops.'}</em>
+                                    </div>
+                                </div>`;
+                        }
                     }
 
                     item.innerHTML = `
@@ -1005,6 +1072,27 @@
                         detailsHtml = `Policy Decision: <strong>${evt.policy_decision}</strong><br>Reason: <em>${evt.policy_reason}</em>`;
                     } else if (evt.event_type === 'ACTION_EXECUTED') {
                         detailsHtml = `Action Taken: <strong>${evt.action_taken}</strong><br>Execution Result: ${evt.execution_result}<br>Business Outcome: <strong>${evt.business_outcome}</strong>`;
+
+                        if (evt.action_taken === 'SEND_RECOVERY_LINK') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble">
+                                    <div class="whatsapp-header">💬 WhatsApp Delivery Preview</div>
+                                    <div class="whatsapp-body">
+                                        Hi Rahul! 👋 Your payment of <strong>₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong> failed due to a gateway/bank error. Tap below to pay securely via Razorpay:<br>
+                                        <span class="whatsapp-link">https://rzp.io/rzp/xiR6aHY</span>
+                                    </div>
+                                </div>`;
+                        } else if (evt.action_taken === 'ESCALATE') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble" style="border-left-color: #e01e5a; background-color: #1a0d18;">
+                                    <div class="whatsapp-header" style="color: #e01e5a;">📢 Slack Escalation Alert (#payment-ops-escalations)</div>
+                                    <div class="whatsapp-body">
+                                        <strong>⚠️ Payment Recovery Escalation Required</strong><br>
+                                        Amount: ₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})} | Category: <code>${evt.category || 'REPEATED_FAILURE'}</code><br>
+                                        <em>Reason: ${evt.policy_reason || 'Manual ops review required.'}</em>
+                                    </div>
+                                </div>`;
+                        }
                     }
 
                     item.innerHTML = `

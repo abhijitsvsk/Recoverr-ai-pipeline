@@ -184,8 +184,9 @@ python run_checkout_metrics_aggregator.py
 
 ---
 
-## 🏆 Razorpay Buildathon — Track 03 Alignment
+## 🏆 Razorpay Buildathon — Track 03 Submission Checklist
 
 - **Track**: Track 03 (AI Revenue Recovery)
 - **Scope**: Payment Failure Recovery (Loop 1) & Checkout Abandonment Recovery (Loop 2)
-- **Core Value**: Transforms fragmented, unsafe recovery scripts into a unified, policy-governed, enterprise-grade AI revenue engine.
+- **Core Philosophy**: *"Separation of Powers — LLM recommends, Policy Engine governs, Action Executor executes, Audit Log records."*
+- **Single Strongest Proof Point**: In the `REPEATED_FAILURE` > ₹10,000 scenario (`network_error` attempt 3, ₹12,500 INR), the LLM recommended `ESCALATE`, but the Policy Engine **BLOCKED** it under Rule 1 (Hard Override), mandating `STOP` due to merchant risk policy rules. (Unlike `UNKNOWN` > ₹10,000 where the LLM already recommended `STOP`, this case proves the Policy Engine actively overriding an LLM recommendation).

@@ -436,7 +436,18 @@ def simulate_checkout_abandonment():
         {"customer_abandon_reason": "cart_idle_15m", "abandon_count": 1, "cart_value_in_paise": 1500000},
         {"customer_abandon_reason": "unmapped_browser_crash_77", "abandon_count": 1, "cart_value_in_paise": 399900},
     ]
-    scen = random.choice(loop2_scenarios)
+    scen_idx = request.args.get("scenario_index")
+    if scen_idx is None and request.is_json and request.json:
+        scen_idx = request.json.get("scenario_index")
+
+    if scen_idx is not None:
+        try:
+            scen = loop2_scenarios[int(scen_idx)]
+        except (IndexError, ValueError):
+            scen = random.choice(loop2_scenarios)
+    else:
+        scen = random.choice(loop2_scenarios)
+
     abandon_reason = scen["customer_abandon_reason"]
     cart_value_in_paise = scen["cart_value_in_paise"]
     abandon_count = scen["abandon_count"]

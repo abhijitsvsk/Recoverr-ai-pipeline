@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Razorpay RecoverAI — Merchant Payment Recovery Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -519,14 +520,37 @@
         }
         .stepper-node.pending .stepper-title { color: #64748b; }
 
-        .stepper-node.active .stepper-icon-circle {
-            background-color: #1d4ed8;
-            border: 2px solid #60a5fa;
-            color: #ffffff;
-            box-shadow: 0 0 18px rgba(59, 130, 246, 0.9);
-            transform: scale(1.15);
+        @keyframes pulseRing {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.9);
+                transform: scale(1.08);
+            }
+            50% {
+                box-shadow: 0 0 0 14px rgba(59, 130, 246, 0);
+                transform: scale(1.22);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+                transform: scale(1.08);
+            }
         }
-        .stepper-node.active .stepper-title { color: #93c5fd; font-weight: 700; }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .stepper-node.active .stepper-icon-circle {
+            background-color: #1d4ed8 !important;
+            border: 2px solid #60a5fa !important;
+            color: #ffffff !important;
+            animation: pulseRing 1.1s infinite ease-in-out !important;
+        }
+        .stepper-node.active .stepper-title {
+            color: #60a5fa !important;
+            font-weight: 700 !important;
+            animation: pulseText 1.1s infinite ease-in-out !important;
+        }
 
         .stepper-node.completed .stepper-icon-circle {
             background-color: #064e3b;
@@ -576,10 +600,7 @@
         <!-- Header -->
         <div class="header">
             <div>
-                <title>Razorpay RecoverAI Merchant Dashboard</title>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <style>
-                </style>
+                <h1>Razorpay RecoverAI Merchant Dashboard</h1>
                 <p>Read-only display layer for batch payment recovery evaluation</p>
             </div>
             <div class="scenario-toolbar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -1935,7 +1956,7 @@
                     // Stage 2: Classify Active -> Completed
                     const n2 = document.getElementById(`node-stage-${loopNum}-2`);
                     if (n2) n2.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 450));
+                    await new Promise(r => setTimeout(r, 650));
                     if (n2) {
                         n2.className = 'stepper-node completed';
                         n2.querySelector('.stepper-icon-circle').innerText = '✓';
@@ -1947,7 +1968,7 @@
                     // Stage 3: AI Recommends Active -> Completed
                     const n3 = document.getElementById(`node-stage-${loopNum}-3`);
                     if (n3) n3.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 450));
+                    await new Promise(r => setTimeout(r, 650));
                     if (n3) {
                         n3.className = 'stepper-node completed';
                         n3.querySelector('.stepper-icon-circle').innerText = '✓';
@@ -1959,7 +1980,7 @@
                     // Stage 4: Policy Reviews Active -> Completed
                     const n4 = document.getElementById(`node-stage-${loopNum}-4`);
                     if (n4) n4.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 450));
+                    await new Promise(r => setTimeout(r, 650));
                     if (n4) {
                         n4.className = 'stepper-node completed';
                         n4.querySelector('.stepper-icon-circle').innerText = '✓';
@@ -1971,7 +1992,7 @@
                     // Stage 5: Execute Active -> Completed
                     const n5 = document.getElementById(`node-stage-${loopNum}-5`);
                     if (n5) n5.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 450));
+                    await new Promise(r => setTimeout(r, 650));
                     if (n5) {
                         n5.className = 'stepper-node completed';
                         n5.querySelector('.stepper-icon-circle').innerText = '✓';

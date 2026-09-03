@@ -38,6 +38,13 @@ from dup_db import get_dup_connection, DEFAULT_DUP_DB_PATH, LIVE_TEST_DUP_DB_PAT
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
 # Protected Baseline Databases (NEVER written to by interactive live simulations)
 DB_PATH = "recover_ai.db"
 SNAPSHOT_PATH = "recover_ai_verified_snapshot.db"

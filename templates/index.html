@@ -80,8 +80,8 @@
         /* Headline Metrics Grid */
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
             margin-bottom: 32px;
         }
 
@@ -482,7 +482,7 @@
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
             border: 1px solid #3b82f6;
             border-radius: 12px;
-            padding: 18px 24px;
+            padding: 20px 24px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.6);
         }
 
@@ -490,35 +490,44 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             z-index: 2;
+            min-width: 120px;
+            text-align: center;
             transition: all 0.3s ease;
         }
 
         .stepper-icon-circle {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            min-height: 36px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            flex-shrink: 0 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5) !important;
         }
 
         .stepper-title {
-            font-size: 12px;
-            font-weight: 600;
-            transition: color 0.3s ease;
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            white-space: nowrap !important;
+            font-family: monospace !important;
+            transition: color 0.3s ease !important;
+            margin-top: 4px !important;
         }
 
         .stepper-node.pending .stepper-icon-circle {
-            background-color: #0f172a;
-            border: 2px solid #334155;
-            color: #64748b;
+            background-color: #0f172a !important;
+            border: 2px solid #334155 !important;
+            color: #64748b !important;
         }
-        .stepper-node.pending .stepper-title { color: #64748b; }
+        .stepper-node.pending .stepper-title { color: #64748b !important; }
 
         @keyframes pulseRing {
             0% {
@@ -553,28 +562,31 @@
         }
 
         .stepper-node.completed .stepper-icon-circle {
-            background-color: #064e3b;
-            border: 2px solid #10b981;
-            color: #10b981;
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+            background-color: #10b981 !important;
+            border: 2px solid #34d399 !important;
+            color: #064e3b !important;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6) !important;
         }
-        .stepper-node.completed .stepper-title { color: #34d399; font-weight: 700; }
+        .stepper-node.completed .stepper-title {
+            color: #10b981 !important;
+            font-weight: 700 !important;
+        }
 
         .stepper-connector {
-            flex: 1;
-            height: 3px;
-            background-color: #334155;
-            margin: 0 12px;
-            position: relative;
-            top: -14px;
-            transition: background-color 0.4s ease;
+            flex: 1 !important;
+            height: 3px !important;
+            background-color: #334155 !important;
+            margin: 0 8px !important;
+            margin-bottom: 20px !important;
+            position: relative !important;
+            transition: background-color 0.4s ease !important;
         }
         .stepper-connector.completed {
-            background-color: #10b981;
-            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+            background-color: #10b981 !important;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5) !important;
         }
         .stepper-connector.active {
-            background: linear-gradient(90deg, #10b981, #3b82f6);
+            background: linear-gradient(90deg, #10b981, #3b82f6) !important;
         }
     </style>
 </head>
@@ -619,8 +631,9 @@
         </div>
 
         <!-- PIPELINE STEPPER CARD (Loop 1) -->
-        <div id="pipeline-stepper-card-1" class="stepper-card-panel" style="display: block;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div id="pipeline-stepper-card-1" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: block;">
+            <!-- Header Row -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div style="font-size: 13px; font-weight: 700; color: #60a5fa; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
                     <span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; background-color: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6;"></span>
                     LIVE AGENTIC PIPELINE EXECUTION
@@ -630,35 +643,51 @@
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+            <!-- Stepper Nodes & Connecting Lines -->
+            <div style="display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0;">
+                
+                <!-- Stage 1 -->
                 <div id="node-stage-1-1" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Ingest: pay_sim_1788279288_457</div>
                 </div>
-                <div id="line-stage-1-1" class="stepper-connector completed"></div>
 
+                <!-- Line 1 -->
+                <div id="line-stage-1-1" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 2 -->
                 <div id="node-stage-1-2" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Classify: TEMPORARY</div>
                 </div>
-                <div id="line-stage-1-2" class="stepper-connector completed"></div>
 
+                <!-- Line 2 -->
+                <div id="line-stage-1-2" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 3 -->
                 <div id="node-stage-1-3" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">AI Recommends: STOP</div>
                 </div>
-                <div id="line-stage-1-3" class="stepper-connector completed"></div>
 
+                <!-- Line 3 -->
+                <div id="line-stage-1-3" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 4 -->
                 <div id="node-stage-1-4" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Policy Reviews: BLOCKED</div>
                 </div>
-                <div id="line-stage-1-4" class="stepper-connector completed"></div>
 
+                <!-- Line 4 -->
+                <div id="line-stage-1-4" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 5 -->
                 <div id="node-stage-1-5" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Execute: ESCALATE</div>
                 </div>
+
             </div>
         </div>
 
@@ -827,8 +856,9 @@
         </div>
 
         <!-- PIPELINE STEPPER CARD (Loop 2) -->
-        <div id="pipeline-stepper-card-2" class="stepper-card-panel" style="display: block;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div id="pipeline-stepper-card-2" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: block;">
+            <!-- Header Row -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div style="font-size: 13px; font-weight: 700; color: #60a5fa; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
                     <span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; background-color: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6;"></span>
                     LIVE AGENTIC PIPELINE EXECUTION
@@ -838,35 +868,51 @@
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+            <!-- Stepper Nodes & Connecting Lines -->
+            <div style="display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0;">
+                
+                <!-- Stage 1 -->
                 <div id="node-stage-2-1" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Ingest: chk_42_004</div>
                 </div>
-                <div id="line-stage-2-1" class="stepper-connector completed"></div>
 
+                <!-- Line 1 -->
+                <div id="line-stage-2-1" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 2 -->
                 <div id="node-stage-2-2" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Classify: RECENT_ABANDON</div>
                 </div>
-                <div id="line-stage-2-2" class="stepper-connector completed"></div>
 
+                <!-- Line 2 -->
+                <div id="line-stage-2-2" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 3 -->
                 <div id="node-stage-2-3" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">AI Recommends: SEND_CART_REMINDER</div>
                 </div>
-                <div id="line-stage-2-3" class="stepper-connector completed"></div>
 
+                <!-- Line 3 -->
+                <div id="line-stage-2-3" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 4 -->
                 <div id="node-stage-2-4" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Policy Reviews: APPROVED</div>
                 </div>
-                <div id="line-stage-2-4" class="stepper-connector completed"></div>
 
+                <!-- Line 4 -->
+                <div id="line-stage-2-4" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 5 -->
                 <div id="node-stage-2-5" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Execute: SEND_CART_REMINDER</div>
                 </div>
+
             </div>
         </div>
 
@@ -1001,8 +1047,9 @@
         </div>
 
         <!-- PIPELINE STEPPER CARD (Loop 3) -->
-        <div id="pipeline-stepper-card-3" class="stepper-card-panel" style="display: block;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div id="pipeline-stepper-card-3" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #7c3aed; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: block;">
+            <!-- Header Row -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div style="font-size: 13px; font-weight: 700; color: #a78bfa; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
                     <span class="pulse-dot" style="display: inline-block; width: 8px; height: 8px; background-color: #8b5cf6; border-radius: 50%; box-shadow: 0 0 10px #8b5cf6;"></span>
                     LIVE AGENTIC PIPELINE EXECUTION
@@ -1012,35 +1059,51 @@
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+            <!-- Stepper Nodes & Connecting Lines -->
+            <div style="display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0;">
+                
+                <!-- Stage 1 -->
                 <div id="node-stage-3-1" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Ingest: chg_dup_001</div>
                 </div>
-                <div id="line-stage-3-1" class="stepper-connector completed"></div>
 
+                <!-- Line 1 -->
+                <div id="line-stage-3-1" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 2 -->
                 <div id="node-stage-3-2" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Classify: EXACT_DUPLICATE</div>
                 </div>
-                <div id="line-stage-3-2" class="stepper-connector completed"></div>
 
+                <!-- Line 2 -->
+                <div id="line-stage-3-2" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 3 -->
                 <div id="node-stage-3-3" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">AI Recommends: AUTO_REFUND</div>
                 </div>
-                <div id="line-stage-3-3" class="stepper-connector completed"></div>
 
+                <!-- Line 3 -->
+                <div id="line-stage-3-3" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 4 -->
                 <div id="node-stage-3-4" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Policy Reviews: APPROVED</div>
                 </div>
-                <div id="line-stage-3-4" class="stepper-connector completed"></div>
 
+                <!-- Line 4 -->
+                <div id="line-stage-3-4" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+
+                <!-- Stage 5 -->
                 <div id="node-stage-3-5" class="stepper-node completed">
-                    <div class="stepper-icon-circle">✓</div>
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #064e3b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
                     <div class="stepper-title">Execute: AUTO_REFUND</div>
                 </div>
+
             </div>
         </div>
 

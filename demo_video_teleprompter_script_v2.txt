@@ -1,0 +1,171 @@
+================================================================================
+RECOVERAI 5-MINUTE MASTERCLASS — VOICE-OVER SCRIPT & VIDEO SYNC CUE SHEET
+(Final 5-Minute Cut — Synchronized 1:1 with Recorded Screen Actions)
+================================================================================
+
+VIDEO EDITING CUTS CHEAT SHEET (TARGET 5.00 MINUTE VIDEO LENGTH):
+• Section 1 (0:00 - 0:30): Keep original raw recording speed.
+• Section 2 (0:30 - 1:15): Trim 33s pipeline run (Raw 0:33-1:06) to 5 seconds.
+• Section 3 (1:15 - 1:55): Trim 19s pipeline run (Raw 1:22-1:41) to 4 seconds.
+• Section 4 (1:55 - 2:45): Trim 47s pipeline run (Raw 1:58-2:45) to 6 seconds.
+• Section 5 (2:45 - 3:35): Trim 51s pipeline run (Raw 3:02-3:53) to 5 seconds.
+• Section 6 (3:35 - 4:15): Trim 19s pipeline run (Raw 4:10-4:29) to 4 seconds.
+• Section 7 (4:15 - 4:45): Trim 19s pipeline run (Raw 4:51-5:10) to 4 seconds.
+• Section 8 (4:45 - 5:00): Keep original raw recording speed (Instant Reset + KPI Summary).
+
+================================================================================
+SECTION 1: HOOK & ARCHITECTURE OVERVIEW [0:00 – 0:40]
+================================================================================
+
+MOUSE & SCROLL CUES:
+1. Ensure 'Loop 1: Payment Recovery' tab is active on screen load (0:00).
+2. Point cursor at active DEMO MODE badge and top tabs (Loop 1, Loop 2, Loop 3) (0:05–0:15).
+3. Scroll Down Cue (0:18 – 0:22): When saying "we evaluated 100 real-world scenario cases...",
+   smoothly scroll down for 4 seconds to show the transaction table (100 / 100 evaluated).
+4. Scroll Back Up Cue (0:23 – 0:26): At 0:23, smoothly scroll back up to the top toolbar for
+   3 seconds to prepare for Section 2.
+
+VOICEOVER:
+"Merchant revenue frequently slips away through payment failures, checkout
+abandonment, and unintended duplicate charges. Standard webhooks log these failure
+events, but lack an automated decision and recovery layer.
+
+We built RecoverAI — an intelligent, bounded recovery pipeline operating across
+three distinct failure loops. To validate reliability at scale, we evaluated 100
+real-world scenario cases in each of our three loops — 300 in total.
+
+The core architecture is strictly decoupled: the LLM provides contextual
+recommendations, but a 100% code-only Policy Engine holds final authority to
+approve or block execution. If the AI recommendation conflicts with policy rules,
+policy wins every single time."
+
+
+================================================================================
+SECTION 2: LOOP 1 — PAYMENT FAILURE RECOVERY [0:40 – 2:00]
+================================================================================
+
+SCENARIO 1: TEMPORARY BANK FAILURE & AUTOMATED RETRY SUCCESS
+MOUSE & ACTION CUES:
+1. In Loop 1 Toolbar, select from dropdown: [ ⚡ Scenario: TEMPORARY Failure (Retry Success) ] (Option 0).
+2. Click button: [ ⚡ Run Live Simulation ].
+3. Watch Real-Time 5-Node Stepper Bar animate live (Ingest -> Classify -> AI Recommends -> Policy Reviews -> Execute).
+4. Point cursor at latency breakdown chip: 'LLM Reasoning: 15.2s · Policy Engine: 12ms · Action Executor: 45ms'.
+5. When Audit Drawer opens, point cursor at: TEMPORARY -> RETRY -> Policy APPROVED -> RECOVERED.
+
+VOICEOVER:
+"First, let's examine Loop 1 for payment failures. When a temporary bank error
+occurs, we trigger our live simulation.
+
+You can watch our 5-node pipeline stepper execute live: classifying the failure as
+TEMPORARY. The LLM recommended STOP, but the Policy Engine BLOCKED it, enforcing an
+automated bank retry to recover the revenue.
+
+Opening the UI Audit Timeline reveals the full event trace — proving every policy
+decision and override is logged without AI hallucination."
+
+
+SCENARIO 2: HIGH-VALUE PERMANENT FAILURE & POLICY BLOCKED ESCALATION
+MOUSE & ACTION CUES:
+1. Close drawer (X).
+2. In Loop 1 Toolbar, select from dropdown: [ ⚡ Scenario: PERMANENT Failure (High Value ₹22.5k, Policy Blocked) ] (Option 1).
+3. Click button: [ ⚡ Run Live Simulation ].
+4. Point cursor at Policy Decision: BLOCKED badge, Slack Alert (#payment-ops-escalations),
+   and click '[ Toggle Raw Webhook JSON ]' to expand.
+
+VOICEOVER:
+"Now consider a high-value payment failure of 22,500 rupees. Here, the LLM
+suggested stopping recovery, but the Policy Engine blocked the recommendation
+because high-value permanent failures fall outside permitted auto-abandon thresholds.
+
+This policy block triggers an automated escalation to human operations on Slack,
+complete with auditable JSON event context."
+
+
+================================================================================
+SECTION 3: LOOP 2 — CHECKOUT ABANDONMENT [2:00 – 3:30]
+================================================================================
+
+SCENARIO 3: TARGETED DISCOUNT NUDGE
+MOUSE & ACTION CUES:
+1. Click top tab: [ Loop 2: Checkout Abandonment ].
+2. In Loop 2 Toolbar, select from dropdown: [ ⚡ Scenario: RECENT_ABANDON (Discount Nudge - ₹2,999) ] (Option 0).
+3. Click button: [ ⚡ Run Live Simulation ].
+4. Watch Real-Time 5-Node Stepper Bar animate live.
+5. When Audit Drawer opens, point cursor at WhatsApp Delivery Preview displaying code RECOVER10.
+
+VOICEOVER:
+"Next, Loop 2 addresses checkout abandonment. When a first-time shopper leaves
+a 2,999 rupee cart idle, RecoverAI classifies it as a recent abandon, the LLM
+recommends a discount nudge, and policy approves a 10% voucher — Code RECOVER10.
+
+The shopper receives a personalized WhatsApp notification directing them back to
+complete checkout."
+
+
+SCENARIO 4: MARGIN PROTECTION & REPEAT ABANDONER POLICY BLOCK
+MOUSE & ACTION CUES:
+1. Close drawer (X).
+2. In Loop 2 Toolbar, select from dropdown: [ ⚡ Scenario: REPEAT_ABANDONER (Price Check - ₹7,999) ] (Option 3).
+3. Click button: [ ⚡ Run Live Simulation ].
+4. Watch Real-Time 5-Node Stepper Bar animate live.
+5. Point cursor at Policy Decision: BLOCKED badge and Slack Alert (#cart-escalations).
+
+VOICEOVER:
+"However, if a customer repeatedly abandons carts, merchant policy restricts
+sending additional discount vouchers. The Policy Engine blocks the AI recommendation,
+protecting gross margins against discount abuse and escalating the cart to operations
+for manual review."
+
+
+================================================================================
+SECTION 4: LOOP 3 — DUPLICATE CHARGE FINANCIAL PROTECTION [3:30 – 4:30]
+================================================================================
+
+SCENARIO 5: LIVE PIPELINE STEPPER & API AUTO-REFUND
+MOUSE & ACTION CUES:
+1. Click top tab: [ Loop 3: Duplicate Charges ].
+2. In Loop 3 Toolbar, select from dropdown: [ ⚡ Scenario: EXACT_DUPLICATE (Auto-Refund Approved) ] (Option 0).
+3. Click button: [ ⚡ Run Live Simulation ].
+4. Watch Real-Time 5-Node Stepper Bar animate live (Ingest -> Classify -> AI Recommends -> Policy Reviews -> Execute).
+5. Point cursor at latency breakdown chip: 'LLM Reasoning: 15.2s · Policy Engine: 12ms · Action Executor: 45ms'.
+
+VOICEOVER:
+"Finally, Loop 3 handles financial exception management for duplicate charges.
+Let's trigger a live simulation for an accidental double-click event.
+
+Our real-time 5-node pipeline stepper measures execution latency down to the
+millisecond across classification, policy evaluation, and action execution. Policy
+approves an automated refund, executing the call through the Razorpay test API."
+
+
+SCENARIO 6: FRAUD PATTERN SECURITY ESCALATION
+MOUSE & ACTION CUES:
+1. Close drawer (X).
+2. In Loop 3 Toolbar, select from dropdown: [ ⚡ Scenario: POSSIBLE_FRAUD (Fraud Override) ] (Option 2).
+3. Click button: [ ⚡ Run Live Simulation ].
+4. Watch Real-Time 5-Node Stepper Bar animate live.
+5. Point cursor at Policy Decision: BLOCKED / OVERRIDE badge and Slack Security Alert (#security-alerts).
+
+VOICEOVER:
+"If a repeat double-charge pattern crosses safety thresholds, policy executes an
+immediate security override, halting automated refunds and alerting security
+operations on Slack."
+
+
+================================================================================
+SECTION 5: SUMMARY & TRACK 03 METRICS WRAP-UP [4:30 – 5:00]
+================================================================================
+
+MOUSE CUES:
+1. Click back to [ Loop 1: Payment Recovery ] tab.
+2. Point cursor at top KPI summary cards (Revenue At Risk: 6.5L+, Revenue Recovered: 70k+, Recovery Rate: 10.79%).
+
+VOICEOVER:
+"In summary: RecoverAI provides a bounded, policy-controlled framework that
+converts uncaptured revenue into verified recovery across payment failures,
+abandoned carts, and duplicate charges.
+
+Our measured batch results across 300 test scenarios demonstrate full auditability,
+explicit policy blocks, and verified outcomes. AI recommends, policy controls,
+actions execute, outcomes are verified, and every step is audited. Thank you!"
+================================================================================

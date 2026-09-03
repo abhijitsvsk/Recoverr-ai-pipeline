@@ -63,10 +63,16 @@ def index():
 
 @app.route("/api/reset", methods=["POST"])
 def reset_database():
-    """Fast recording reset endpoint restoring database from pre-computed verified snapshot (<10ms)."""
+    """Fast recording reset endpoint restoring baseline database snapshots across all 3 failure loops."""
     try:
         restore_snapshot(SNAPSHOT_PATH, DB_PATH)
-        return jsonify({"status": "success", "message": "Database successfully restored from verified snapshot."})
+        for live_db in [LIVE_TEST_DB_PATH, LIVE_TEST_CHECKOUT_DB_PATH, LIVE_TEST_DUP_DB_PATH]:
+            if os.path.exists(live_db):
+                try:
+                    os.remove(live_db)
+                except Exception:
+                    pass
+        return jsonify({"status": "success", "message": "All 3 failure loops successfully restored from baseline snapshots."})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
@@ -436,11 +442,10 @@ def simulate_checkout_abandonment():
 
     # Multi-category scenario pool covering RECENT_ABANDON, STALE_ABANDON, REPEAT_ABANDONER, HIGH_VALUE_ABANDON, UNKNOWN_ABANDON
     loop2_scenarios = [
-        {"customer_abandon_reason": "cart_idle_15m", "abandon_count": 1, "cart_value_in_paise": 499900},
         {"customer_abandon_reason": "shipping_cost_too_high", "abandon_count": 1, "cart_value_in_paise": 299900},
+        {"customer_abandon_reason": "cart_idle_15m", "abandon_count": 1, "cart_value_in_paise": 1500000},
         {"customer_abandon_reason": "cart_idle_48h", "abandon_count": 1, "cart_value_in_paise": 699900},
         {"customer_abandon_reason": "price_check_behavior", "abandon_count": 2, "cart_value_in_paise": 799900},
-        {"customer_abandon_reason": "cart_idle_15m", "abandon_count": 1, "cart_value_in_paise": 1500000},
         {"customer_abandon_reason": "unmapped_browser_crash_77", "abandon_count": 1, "cart_value_in_paise": 399900},
     ]
     scen_idx = request.args.get("scenario_index")
@@ -587,8 +592,6 @@ def simulate_duplicate_charge():
     loop3_scenarios = [
         {"ground_truth_category": "EXACT_DUPLICATE", "amount_in_paise": 49900, "time_delta_seconds": 120, "prior_duplicate_count": 0, "purchase_type": "accidental_double_click"},
         {"ground_truth_category": "LIKELY_DUPLICATE", "amount_in_paise": 199900, "time_delta_seconds": 15, "prior_duplicate_count": 0, "purchase_type": "rapid_recheckout"},
-        {"ground_truth_category": "EXACT_DUPLICATE", "amount_in_paise": 5500000, "time_delta_seconds": 300, "prior_duplicate_count": 0, "purchase_type": "high_value_double_charge"},
-        {"ground_truth_category": "SUSPECTED_DUPLICATE", "amount_in_paise": 250000, "time_delta_seconds": 180, "prior_duplicate_count": 0, "purchase_type": "multi_instrument_retry"},
         {"ground_truth_category": "EXACT_DUPLICATE", "amount_in_paise": 89900, "time_delta_seconds": 60, "prior_duplicate_count": 3, "purchase_type": "repeat_fraud_pattern"},
         {"ground_truth_category": "UNRELATED", "amount_in_paise": 49900, "time_delta_seconds": 3, "prior_duplicate_count": 0, "purchase_type": "in_game_microtransaction_legit"},
     ]

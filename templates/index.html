@@ -631,7 +631,7 @@
         </div>
 
         <!-- PIPELINE STEPPER CARD (Loop 1) -->
-        <div id="pipeline-stepper-card-1" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: block;">
+        <div id="pipeline-stepper-card-1" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: none;">
             <!-- Header Row -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div style="font-size: 13px; font-weight: 700; color: #60a5fa; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
@@ -639,7 +639,7 @@
                     LIVE AGENTIC PIPELINE EXECUTION
                 </div>
                 <div id="stepper-live-status-text-1" style="font-size: 12px; font-family: monospace; font-weight: 600;">
-                    <span style="color: #ffffff;">✓ Real Pipeline Executed in 25.7s</span> &bull; <span style="color: #60a5fa;">LLM Reasoning: 19.9s</span> &bull; <span style="color: #94a3b8;">Policy Engine: 40.53ms</span> &bull; <span style="color: #f59e0b;">Action Executor: 50.67ms</span>
+                    <span style="color: #60a5fa;">⚡ Select a scenario above & click ⚡ Run Live Simulation to execute real pipeline</span>
                 </div>
             </div>
 
@@ -647,45 +647,45 @@
             <div style="display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0;">
                 
                 <!-- Stage 1 -->
-                <div id="node-stage-1-1" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Ingest: pay_sim_1788279288_457</div>
+                <div id="node-stage-1-1" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">1</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Ingest</div>
                 </div>
 
                 <!-- Line 1 -->
-                <div id="line-stage-1-1" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-1-1" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 2 -->
-                <div id="node-stage-1-2" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Classify: TEMPORARY</div>
+                <div id="node-stage-1-2" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">2</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Classify</div>
                 </div>
 
                 <!-- Line 2 -->
-                <div id="line-stage-1-2" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-1-2" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 3 -->
-                <div id="node-stage-1-3" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">AI Recommends: STOP</div>
+                <div id="node-stage-1-3" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">3</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">AI Recommends</div>
                 </div>
 
                 <!-- Line 3 -->
-                <div id="line-stage-1-3" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-1-3" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 4 -->
-                <div id="node-stage-1-4" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Policy Reviews: BLOCKED</div>
+                <div id="node-stage-1-4" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">4</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Policy Reviews</div>
                 </div>
 
                 <!-- Line 4 -->
-                <div id="line-stage-1-4" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-1-4" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 5 -->
-                <div id="node-stage-1-5" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Execute: ESCALATE</div>
+                <div id="node-stage-1-5" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">5</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Execute</div>
                 </div>
 
             </div>
@@ -842,21 +842,21 @@
             </div>
             <div class="scenario-toolbar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <select id="sim-scenario-select-2" style="background-color: #1e293b; color: #fff; border: 1px solid #3b82f6; border-radius: 6px; padding: 7px 10px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                    <option value="0">⚡ Scenario: RECENT_ABANDON (15m Idle, Cart Nudge)</option>
-                    <option value="1">⚡ Scenario: RECENT_ABANDON (Shipping Cost High, Cart Nudge)</option>
-                    <option value="2">⚡ Scenario: STALE_ABANDON (48h Idle, Policy Blocked)</option>
-                    <option value="3">⚡ Scenario: REPEAT_ABANDONER (Price Check, Discount Nudge)</option>
-                    <option value="4">⚡ Scenario: HIGH_VALUE_ABANDON (₹15k Cart, Discount Nudge)</option>
-                    <option value="5">⚡ Scenario: UNKNOWN_ABANDON (Browser Crash, Escalated)</option>
+                    <option value="0">⚡ Scenario: RECENT_ABANDON (Discount Nudge - ₹2,999)</option>
+                    <option value="1">⚡ Scenario: RECENT_ABANDON (High Value Cart - ₹15,000)</option>
+                    <option value="2">⚡ Scenario: STALE_ABANDON (Cart Idle 48h - ₹6,999)</option>
+                    <option value="3">⚡ Scenario: REPEAT_ABANDONER (Price Check - ₹7,999)</option>
+                    <option value="4">⚡ Scenario: UNKNOWN_ABANDON (Browser Crash - ₹3,999)</option>
                 </select>
                 <button id="btn-sim-checkout" class="btn-scenario" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border-color: #3b82f6;" onclick="runLiveSimulation(2)">⚡ Run Live Simulation</button>
                 <button class="btn-scenario" onclick="openCheckoutTimeline('chk_42_004')">🎬 Sample Converted (chk_42_004)</button>
                 <button class="btn-scenario" onclick="openCheckoutTimeline('chk_42_006')">🎬 Sample Escalated (chk_42_006)</button>
+                <button class="btn-scenario" style="background: linear-gradient(135deg, #dc2626, #b91c1c); border-color: #ef4444;" onclick="resetDatabase()">🔄 Instant Reset</button>
             </div>
         </div>
 
         <!-- PIPELINE STEPPER CARD (Loop 2) -->
-        <div id="pipeline-stepper-card-2" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: block;">
+        <div id="pipeline-stepper-card-2" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #3b82f6; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: none;">
             <!-- Header Row -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div style="font-size: 13px; font-weight: 700; color: #60a5fa; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
@@ -864,7 +864,7 @@
                     LIVE AGENTIC PIPELINE EXECUTION
                 </div>
                 <div id="stepper-live-status-text-2" style="font-size: 12px; font-family: monospace; font-weight: 600;">
-                    <span style="color: #ffffff;">✓ Real Pipeline Executed in 1.4s</span> &bull; <span style="color: #60a5fa;">LLM Reasoning: 1.1s</span> &bull; <span style="color: #94a3b8;">Policy Engine: 35.10ms</span> &bull; <span style="color: #10b981;">Action Executor: 42.20ms</span>
+                    <span style="color: #60a5fa;">⚡ Select a scenario above & click ⚡ Run Live Simulation to execute real pipeline</span>
                 </div>
             </div>
 
@@ -872,45 +872,45 @@
             <div style="display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0;">
                 
                 <!-- Stage 1 -->
-                <div id="node-stage-2-1" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Ingest: chk_42_004</div>
+                <div id="node-stage-2-1" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">1</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Ingest</div>
                 </div>
 
                 <!-- Line 1 -->
-                <div id="line-stage-2-1" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-2-1" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 2 -->
-                <div id="node-stage-2-2" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Classify: RECENT_ABANDON</div>
+                <div id="node-stage-2-2" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">2</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Classify</div>
                 </div>
 
                 <!-- Line 2 -->
-                <div id="line-stage-2-2" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-2-2" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 3 -->
-                <div id="node-stage-2-3" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">AI Recommends: SEND_CART_REMINDER</div>
+                <div id="node-stage-2-3" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">3</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">AI Recommends</div>
                 </div>
 
                 <!-- Line 3 -->
-                <div id="line-stage-2-3" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-2-3" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 4 -->
-                <div id="node-stage-2-4" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Policy Reviews: APPROVED</div>
+                <div id="node-stage-2-4" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">4</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Policy Reviews</div>
                 </div>
 
                 <!-- Line 4 -->
-                <div id="line-stage-2-4" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-2-4" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 5 -->
-                <div id="node-stage-2-5" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Execute: SEND_CART_REMINDER</div>
+                <div id="node-stage-2-5" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">5</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Execute</div>
                 </div>
 
             </div>
@@ -959,6 +959,31 @@
                 <div class="metric-title">Unresolved (Stopped)</div>
                 <div class="metric-value" id="val-chk-unresolved" style="color: var(--text-muted);">0</div>
                 <div class="metric-subtext">Note: 0 because STALE_ABANDON checkouts were BLOCKED by Policy Engine and routed to ESCALATED rather than STOPPED.</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid (Loop 2) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+            <!-- Donut Chart Card -->
+            <div class="card-panel" style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 class="section-title" style="margin-bottom: 0;">Loop 2: Checkout Abandonment Categories</h2>
+                    <span style="font-size: 12px; color: var(--text-muted);">Active Loop Breakdown</span>
+                </div>
+                <div style="position: relative; height: 260px;">
+                    <canvas id="categoryDonutChart2"></canvas>
+                </div>
+            </div>
+
+            <!-- Cross-Loop Revenue Bar Chart Card -->
+            <div class="card-panel" style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 class="section-title" style="margin-bottom: 0;">Cross-Loop Revenue Recovery (INR)</h2>
+                    <span style="font-size: 12px; color: var(--text-muted);">At Risk vs Recovered / Refunded</span>
+                </div>
+                <div style="position: relative; height: 260px;">
+                    <canvas id="crossLoopBarChart2"></canvas>
+                </div>
             </div>
         </div>
 
@@ -1035,19 +1060,18 @@
             </div>
             <div class="scenario-toolbar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <select id="sim-scenario-select-3" style="background-color: #1e293b; color: #fff; border: 1px solid #7c3aed; border-radius: 6px; padding: 7px 10px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                    <option value="0">⚡ Scenario: EXACT_DUPLICATE (Accidental Double Click, Auto-Refund)</option>
-                    <option value="1">⚡ Scenario: LIKELY_DUPLICATE (Rapid Recheckout, Auto-Refund)</option>
-                    <option value="2">⚡ Scenario: HIGH_VALUE_DUPLICATE (₹55k High Value, Auto-Refund)</option>
-                    <option value="3">⚡ Scenario: SUSPECTED_DUPLICATE (Multi-Instrument, Review Hold)</option>
-                    <option value="4">⚡ Scenario: REPEAT_FRAUD_PATTERN (Fraud Escalation)</option>
-                    <option value="5">⚡ Scenario: UNRELATED (In-Game Microtransaction, No Action)</option>
+                    <option value="0">⚡ Scenario: EXACT_DUPLICATE (Auto-Refund Approved)</option>
+                    <option value="1">⚡ Scenario: LIKELY_DUPLICATE (Rapid Recheckout)</option>
+                    <option value="2">⚡ Scenario: POSSIBLE_FRAUD (Fraud Override → Escalated to Security)</option>
+                    <option value="3">⚡ Scenario: UNRELATED (Legitimate False Positive)</option>
                 </select>
                 <button id="btn-sim-dup" class="btn-scenario" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); border-color: #8b5cf6;" onclick="runLiveSimulation(3)">⚡ Run Live Simulation</button>
+                <button class="btn-scenario" style="background: linear-gradient(135deg, #dc2626, #b91c1c); border-color: #ef4444;" onclick="resetDatabase()">🔄 Instant Reset</button>
             </div>
         </div>
 
         <!-- PIPELINE STEPPER CARD (Loop 3) -->
-        <div id="pipeline-stepper-card-3" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #7c3aed; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: block;">
+        <div id="pipeline-stepper-card-3" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid #7c3aed; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); display: none;">
             <!-- Header Row -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div style="font-size: 13px; font-weight: 700; color: #a78bfa; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
@@ -1055,7 +1079,7 @@
                     LIVE AGENTIC PIPELINE EXECUTION
                 </div>
                 <div id="stepper-live-status-text-3" style="font-size: 12px; font-family: monospace; font-weight: 600;">
-                    <span style="color: #ffffff;">✓ Real Pipeline Executed in 1.1s</span> &bull; <span style="color: #a78bfa;">LLM Reasoning: 0.8s</span> &bull; <span style="color: #94a3b8;">Policy Engine: 28.40ms</span> &bull; <span style="color: #10b981;">Action Executor: 38.10ms</span>
+                    <span style="color: #a78bfa;">⚡ Select a scenario above & click ⚡ Run Live Simulation to execute real pipeline</span>
                 </div>
             </div>
 
@@ -1063,45 +1087,45 @@
             <div style="display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0;">
                 
                 <!-- Stage 1 -->
-                <div id="node-stage-3-1" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Ingest: chg_dup_001</div>
+                <div id="node-stage-3-1" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">1</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Ingest</div>
                 </div>
 
                 <!-- Line 1 -->
-                <div id="line-stage-3-1" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-3-1" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 2 -->
-                <div id="node-stage-3-2" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Classify: EXACT_DUPLICATE</div>
+                <div id="node-stage-3-2" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">2</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Classify</div>
                 </div>
 
                 <!-- Line 2 -->
-                <div id="line-stage-3-2" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-3-2" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 3 -->
-                <div id="node-stage-3-3" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">AI Recommends: AUTO_REFUND</div>
+                <div id="node-stage-3-3" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">3</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">AI Recommends</div>
                 </div>
 
                 <!-- Line 3 -->
-                <div id="line-stage-3-3" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-3-3" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 4 -->
-                <div id="node-stage-3-4" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Policy Reviews: APPROVED</div>
+                <div id="node-stage-3-4" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">4</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Policy Reviews</div>
                 </div>
 
                 <!-- Line 4 -->
-                <div id="line-stage-3-4" class="stepper-connector completed" style="flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);"></div>
+                <div id="line-stage-3-4" class="stepper-connector pending" style="flex: 1; height: 3px; background-color: #334155; margin: 0 8px;"></div>
 
                 <!-- Stage 5 -->
-                <div id="node-stage-3-5" class="stepper-node completed">
-                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">✓</div>
-                    <div class="stepper-title" style="color: #10b981; font-weight: 700;">Execute: AUTO_REFUND</div>
+                <div id="node-stage-3-5" class="stepper-node pending">
+                    <div class="stepper-icon-circle" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">5</div>
+                    <div class="stepper-title" style="color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap;">Execute</div>
                 </div>
 
             </div>
@@ -1152,6 +1176,31 @@
                 <div class="metric-title">Total Charges Analyzed</div>
                 <div class="metric-value" id="val-dup-total" style="color: var(--accent-blue);">0</div>
                 <div class="metric-subtext">Total duplicate charge records processed through the detection pipeline.</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid (Loop 3) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+            <!-- Donut Chart Card -->
+            <div class="card-panel" style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 class="section-title" style="margin-bottom: 0;">Loop 3: Duplicate Charge Categories</h2>
+                    <span style="font-size: 12px; color: var(--text-muted);">Active Loop Breakdown</span>
+                </div>
+                <div style="position: relative; height: 260px;">
+                    <canvas id="categoryDonutChart3"></canvas>
+                </div>
+            </div>
+
+            <!-- Cross-Loop Revenue Bar Chart Card -->
+            <div class="card-panel" style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 class="section-title" style="margin-bottom: 0;">Cross-Loop Revenue Recovery (INR)</h2>
+                    <span style="font-size: 12px; color: var(--text-muted);">At Risk vs Recovered / Refunded</span>
+                </div>
+                <div style="position: relative; height: 260px;">
+                    <canvas id="crossLoopBarChart3"></canvas>
+                </div>
             </div>
         </div>
 
@@ -1232,7 +1281,11 @@
         let allCheckouts = [];
         let allDupCharges = [];
         let categoryDonutChartInstance = null;
+        let categoryDonutChart2Instance = null;
+        let categoryDonutChart3Instance = null;
         let crossLoopBarChartInstance = null;
+        let crossLoopBarChart2Instance = null;
+        let crossLoopBarChart3Instance = null;
 
         let globalLoop1AtRisk = 650204;
         let globalLoop1Recovered = 70127;
@@ -1385,6 +1438,13 @@
                 globalLoop2AtRisk = data.carts_at_risk_inr;
                 globalLoop2Recovered = data.carts_recovered_inr;
                 updateCrossLoopBarChart();
+                const counts = {};
+                if (data.category_metrics) {
+                    for (const [cat, metrics] of Object.entries(data.category_metrics)) {
+                        counts[cat] = metrics.count;
+                    }
+                }
+                updateDonutChart2(counts);
                 const tbody = document.getElementById('cat-chk-table-body');
                 tbody.innerHTML = '';
 
@@ -1602,9 +1662,21 @@
                 const resp = await fetch('/api/reset', { method: 'POST' });
                 const res = await resp.json();
                 if (res.status === 'success') {
+                    // Refresh metrics & tables for ALL 3 LOOPS
                     await fetchMetrics();
                     await fetchPayments();
-                    alert('⚡ Database successfully restored from verified snapshot!');
+                    await fetchCheckoutMetrics();
+                    await fetchCheckouts();
+                    await fetchDupMetrics();
+                    await fetchDupCharges();
+
+                    // Hide stepper card boxes for all 3 loops
+                    for (let i = 1; i <= 3; i++) {
+                        const card = document.getElementById(`pipeline-stepper-card-${i}`);
+                        if (card) card.style.display = 'none';
+                    }
+
+                    alert('⚡ All 3 failure loops successfully reset to baseline snapshot!');
                 } else {
                     alert('Reset Error: ' + res.message);
                 }
@@ -1702,6 +1774,7 @@
                 globalLoop3AtRisk = data.charges_at_risk_inr;
                 globalLoop3Recovered = data.refunded_inr;
                 updateCrossLoopBarChart();
+                updateDonutChart3(data.category_counts);
                 const tbody = document.getElementById('cat-dup-table-body');
                 tbody.innerHTML = '';
 
@@ -1902,15 +1975,85 @@
             });
         }
 
-        function updateCrossLoopBarChart() {
-            const ctx = document.getElementById('crossLoopBarChart');
+        function updateDonutChart2(catCounts) {
+            const ctx = document.getElementById('categoryDonutChart2');
             if (!ctx) return;
 
-            if (crossLoopBarChartInstance) {
-                crossLoopBarChartInstance.destroy();
+            if (categoryDonutChart2Instance) {
+                categoryDonutChart2Instance.destroy();
             }
 
-            crossLoopBarChartInstance = new Chart(ctx, {
+            const labels = Object.keys(catCounts || {});
+            const dataVals = Object.values(catCounts || {});
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'];
+
+            categoryDonutChart2Instance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataVals,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: { color: '#94a3b8', font: { size: 10, weight: '600' } }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function updateDonutChart3(catCounts) {
+            const ctx = document.getElementById('categoryDonutChart3');
+            if (!ctx) return;
+
+            if (categoryDonutChart3Instance) {
+                categoryDonutChart3Instance.destroy();
+            }
+
+            const labels = Object.keys(catCounts || {});
+            const dataVals = Object.values(catCounts || {});
+            const colors = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ef4444', '#64748b'];
+
+            categoryDonutChart3Instance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataVals,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: { color: '#94a3b8', font: { size: 10, weight: '600' } }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function createBarChartConfig(canvasId) {
+            const ctx = document.getElementById(canvasId);
+            if (!ctx) return null;
+
+            return new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Loop 1: Payments', 'Loop 2: Checkouts', 'Loop 3: Duplicates'],
@@ -1952,6 +2095,16 @@
                     }
                 }
             });
+        }
+
+        function updateCrossLoopBarChart() {
+            if (crossLoopBarChartInstance) crossLoopBarChartInstance.destroy();
+            if (crossLoopBarChart2Instance) crossLoopBarChart2Instance.destroy();
+            if (crossLoopBarChart3Instance) crossLoopBarChart3Instance.destroy();
+
+            crossLoopBarChartInstance = createBarChartConfig('crossLoopBarChart');
+            crossLoopBarChart2Instance = createBarChartConfig('crossLoopBarChart2');
+            crossLoopBarChart3Instance = createBarChartConfig('crossLoopBarChart3');
         }
 
         function setNodeState(loopNum, stageIdx, state, titleText) {

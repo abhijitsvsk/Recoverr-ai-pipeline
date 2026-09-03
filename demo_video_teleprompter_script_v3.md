@@ -116,17 +116,17 @@
 
 ---
 
-### ⏱️ **[2:55 – 3:28] Loop 3, Scenario B — Fraud Pattern Security Override**
+### ⏱️ **[2:55 – 3:28] Loop 3, Scenario B — Fraud Escalation & Policy Approval**
 
 **🖱️ On-Screen Visual:**  
 - `2:55`: Select `POSSIBLE_FRAUD` $\rightarrow$ Click **Run Live Simulation**.
-- `2:55 - 3:09`: Stepper animates.
-- `3:10 - 3:28`: Audit Drawer opens. Mouse points to Policy **SECURITY OVERRIDE** badge and Slack security alert. Drawer closes.
+- `2:55 - 3:09`: Stepper animates (`Ingest → Classify → AI: ESCALATE_AS_FRAUD → Policy: APPROVED → Execute: ESCALATE_AS_FRAUD`).
+- `3:10 - 3:28`: Audit Drawer opens. Mouse points to Policy **APPROVED** badge and Slack security alert. Drawer closes.
 
 **📢 Spoken Voiceover:**
-> *"But when multiple duplicate flags repeat on the same customer, policy overrides everything and forces a security escalation.
+> *"When repeat duplicate patterns signal suspected fraud, the AI model recommends escalating directly to security.
 >
-> Halting auto-refunds and alerting security ops on Slack. The safety rule cannot be overridden by the model."*
+> The Policy Engine APPROVES the fraud escalation, halting auto-refunds and immediately alerting security ops on Slack for manual human review."*
 
 ---
 

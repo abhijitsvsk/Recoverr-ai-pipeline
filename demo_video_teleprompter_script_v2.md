@@ -135,11 +135,13 @@
 1. Close drawer **`✕`**.
 2. In the **Loop 3 Toolbar**, select from dropdown: **`[ ⚡ Scenario: POSSIBLE_FRAUD (Fraud Override → Escalated to Security) ]`** (Option 2).
 3. Click target button: **`[ ⚡ Run Live Simulation ]`**.
-4. Watch ⚡ **Real-Time 5-Node Stepper Progress Bar** animate live.
-5. Point cursor at Policy Decision: **`BLOCKED / OVERRIDE`** badge and **📢 Slack Security Alert** (`#security-alerts`).
+4. Watch ⚡ **Real-Time 5-Node Stepper Progress Bar** animate live (`AI: ESCALATE_AS_FRAUD → Policy: APPROVED → Execute: ESCALATE_AS_FRAUD`).
+5. Point cursor at Policy Decision: **`APPROVED`** badge and **📢 Slack Security Alert** (`#security-alerts`).
 
 ##### 📢 SPOKEN VOICEOVER (Read Aloud)
-> *"If a repeat double-charge pattern crosses safety thresholds, policy executes an immediate security override, halting automated refunds and alerting security operations on Slack."*
+> *"When repeat duplicate patterns signal suspected fraud, the AI model recommends escalating directly to security.
+>
+> The Policy Engine APPROVES the fraud escalation, halting auto-refunds and immediately alerting security ops on Slack for manual human review."*
 
 ---
 

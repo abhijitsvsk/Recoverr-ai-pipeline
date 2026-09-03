@@ -1954,6 +1954,65 @@
             });
         }
 
+        function setNodeState(loopNum, stageIdx, state, titleText) {
+            const node = document.getElementById(`node-stage-${loopNum}-${stageIdx}`);
+            if (!node) return;
+
+            const circle = node.querySelector('.stepper-icon-circle');
+            const title = node.querySelector('.stepper-title');
+            const defaultTitles = ['Ingest', 'Classify', 'AI Recommends', 'Policy Reviews', 'Execute'];
+            const label = titleText || defaultTitles[stageIdx - 1];
+
+            if (state === 'pending') {
+                node.className = 'stepper-node pending';
+                if (circle) {
+                    circle.style.cssText = 'width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #0f172a; border: 2px solid #334155; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; animation: none; box-shadow: none;';
+                    circle.innerText = stageIdx;
+                }
+                if (title) {
+                    title.style.cssText = 'color: #64748b; font-weight: 600; font-size: 11px; font-family: monospace; white-space: nowrap; animation: none;';
+                    title.innerText = label;
+                }
+            } else if (state === 'active') {
+                node.className = 'stepper-node active';
+                if (circle) {
+                    circle.style.cssText = 'width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #1d4ed8; border: 2px solid #60a5fa; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; animation: pulseRing 1.1s infinite ease-in-out; box-shadow: 0 0 16px rgba(59, 130, 246, 0.8);';
+                    circle.innerText = '⚡';
+                }
+                if (title) {
+                    title.style.cssText = 'color: #60a5fa; font-weight: 700; font-size: 11px; font-family: monospace; white-space: nowrap; animation: pulseText 1.1s infinite ease-in-out;';
+                    title.innerText = `${label}...`;
+                }
+            } else if (state === 'completed') {
+                node.className = 'stepper-node completed';
+                if (circle) {
+                    circle.style.cssText = 'width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; background-color: #10b981; border: 2px solid #34d399; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; animation: none; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);';
+                    circle.innerText = '✓';
+                }
+                if (title) {
+                    title.style.cssText = 'color: #10b981; font-weight: 700; font-size: 11px; font-family: monospace; white-space: nowrap; animation: none;';
+                    title.innerText = label;
+                }
+            }
+
+            // Line leading from this stage
+            if (stageIdx < 5) {
+                const line = document.getElementById(`line-stage-${loopNum}-${stageIdx}`);
+                if (line) {
+                    if (state === 'completed') {
+                        line.className = 'stepper-connector completed';
+                        line.style.cssText = 'flex: 1; height: 3px; background-color: #10b981; margin: 0 8px; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); transition: background-color 0.4s ease;';
+                    } else if (state === 'active') {
+                        line.className = 'stepper-connector active';
+                        line.style.cssText = 'flex: 1; height: 3px; background: linear-gradient(90deg, #10b981, #3b82f6); margin: 0 8px; box-shadow: 0 0 8px rgba(59, 130, 246, 0.5); transition: background-color 0.4s ease;';
+                    } else {
+                        line.className = 'stepper-connector pending';
+                        line.style.cssText = 'flex: 1; height: 3px; background-color: #334155; margin: 0 8px; box-shadow: none; transition: background-color 0.4s ease;';
+                    }
+                }
+            }
+        }
+
         async function runLiveSimulation(loopNum) {
             const selectEl = document.getElementById(`sim-scenario-select-${loopNum}`);
             const scenIdx = selectEl ? selectEl.value : 0;
@@ -1975,25 +2034,13 @@
                 statusText.innerHTML = '<span style="color: #60a5fa;">⚡ Triggering Real Backend Pipeline...</span>';
             }
 
-            const defaultTitles = ['Ingest', 'Classify', 'AI Recommends', 'Policy Reviews', 'Execute'];
-
-            // Reset all nodes to pending state
+            // 1. Reset all 5 nodes to pending
             for (let i = 1; i <= 5; i++) {
-                const node = document.getElementById(`node-stage-${loopNum}-${i}`);
-                if (node) {
-                    node.className = 'stepper-node pending';
-                    node.querySelector('.stepper-icon-circle').innerText = i;
-                    node.querySelector('.stepper-title').innerText = defaultTitles[i-1];
-                }
-                if (i < 5) {
-                    const line = document.getElementById(`line-stage-${loopNum}-${i}`);
-                    if (line) line.className = 'stepper-connector';
-                }
+                setNodeState(loopNum, i, 'pending');
             }
 
-            // Stage 1: Ingest active
-            const n1 = document.getElementById(`node-stage-${loopNum}-1`);
-            if (n1) n1.className = 'stepper-node active';
+            // 2. Set Stage 1 (Ingest) to active BLUE pulsing ring while fetching API
+            setNodeState(loopNum, 1, 'active', 'Ingest');
 
             const endpoint = loopNum === 1 
                 ? `/api/simulate-payment-failure?scenario_index=${scenIdx}`
@@ -2010,57 +2057,32 @@
                     const itemId = res.payment_id || res.checkout_id || res.charge_id;
                     const elapsed = res.elapsed_seconds || ((Date.now() - startT) / 1000).toFixed(1);
 
-                    // Stage 1 Completed
-                    n1.className = 'stepper-node completed';
-                    n1.querySelector('.stepper-icon-circle').innerText = '✓';
-                    n1.querySelector('.stepper-title').innerText = `Ingest: ${itemId}`;
-                    document.getElementById(`line-stage-${loopNum}-1`).className = 'stepper-connector completed';
+                    // Stage 1 Completes -> turns SOLID GREEN
+                    setNodeState(loopNum, 1, 'completed', `Ingest: ${itemId}`);
+                    await new Promise(r => setTimeout(r, 200));
 
-                    // Stage 2: Classify Active -> Completed
-                    const n2 = document.getElementById(`node-stage-${loopNum}-2`);
-                    if (n2) n2.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 650));
-                    if (n2) {
-                        n2.className = 'stepper-node completed';
-                        n2.querySelector('.stepper-icon-circle').innerText = '✓';
-                        n2.querySelector('.stepper-title').innerText = `Classify: ${res.category}`;
-                    }
-                    const l2 = document.getElementById(`line-stage-${loopNum}-2`);
-                    if (l2) l2.className = 'stepper-connector completed';
+                    // Stage 2 (Classify): turns BLUE with active pulsing ring for 750ms -> Completes GREEN
+                    setNodeState(loopNum, 2, 'active', 'Classify');
+                    await new Promise(r => setTimeout(r, 750));
+                    setNodeState(loopNum, 2, 'completed', `Classify: ${res.category}`);
+                    await new Promise(r => setTimeout(r, 200));
 
-                    // Stage 3: AI Recommends Active -> Completed
-                    const n3 = document.getElementById(`node-stage-${loopNum}-3`);
-                    if (n3) n3.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 650));
-                    if (n3) {
-                        n3.className = 'stepper-node completed';
-                        n3.querySelector('.stepper-icon-circle').innerText = '✓';
-                        n3.querySelector('.stepper-title').innerText = `AI Recommends: ${res.recommended_action}`;
-                    }
-                    const l3 = document.getElementById(`line-stage-${loopNum}-3`);
-                    if (l3) l3.className = 'stepper-connector completed';
+                    // Stage 3 (AI Recommends): turns BLUE with active pulsing ring for 750ms -> Completes GREEN
+                    setNodeState(loopNum, 3, 'active', 'AI Recommends');
+                    await new Promise(r => setTimeout(r, 750));
+                    setNodeState(loopNum, 3, 'completed', `AI Recommends: ${res.recommended_action}`);
+                    await new Promise(r => setTimeout(r, 200));
 
-                    // Stage 4: Policy Reviews Active -> Completed
-                    const n4 = document.getElementById(`node-stage-${loopNum}-4`);
-                    if (n4) n4.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 650));
-                    if (n4) {
-                        n4.className = 'stepper-node completed';
-                        n4.querySelector('.stepper-icon-circle').innerText = '✓';
-                        n4.querySelector('.stepper-title').innerText = `Policy Reviews: ${res.policy_decision}`;
-                    }
-                    const l4 = document.getElementById(`line-stage-${loopNum}-4`);
-                    if (l4) l4.className = 'stepper-connector completed';
+                    // Stage 4 (Policy Reviews): turns BLUE with active pulsing ring for 750ms -> Completes GREEN
+                    setNodeState(loopNum, 4, 'active', 'Policy Reviews');
+                    await new Promise(r => setTimeout(r, 750));
+                    setNodeState(loopNum, 4, 'completed', `Policy Reviews: ${res.policy_decision}`);
+                    await new Promise(r => setTimeout(r, 200));
 
-                    // Stage 5: Execute Active -> Completed
-                    const n5 = document.getElementById(`node-stage-${loopNum}-5`);
-                    if (n5) n5.className = 'stepper-node active';
-                    await new Promise(r => setTimeout(r, 650));
-                    if (n5) {
-                        n5.className = 'stepper-node completed';
-                        n5.querySelector('.stepper-icon-circle').innerText = '✓';
-                        n5.querySelector('.stepper-title').innerText = `Execute: ${res.action_taken}`;
-                    }
+                    // Stage 5 (Execute): turns BLUE with active pulsing ring for 750ms -> Completes GREEN
+                    setNodeState(loopNum, 5, 'active', 'Execute');
+                    await new Promise(r => setTimeout(r, 750));
+                    setNodeState(loopNum, 5, 'completed', `Execute: ${res.action_taken}`);
 
                     // Set latency header chip matching reference screenshot
                     if (statusText) {

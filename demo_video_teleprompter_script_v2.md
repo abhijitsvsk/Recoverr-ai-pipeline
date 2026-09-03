@@ -139,9 +139,11 @@
 5. Point cursor at Policy Decision: **`APPROVED`** badge and **📢 Slack Security Alert** (`#security-alerts`).
 
 ##### 📢 SPOKEN VOICEOVER (Read Aloud)
-> *"When repeat duplicate patterns signal suspected fraud, the AI model recommends escalating directly to security.
+> *"Let me show you Loop 3 for duplicate charges. When repeat duplicate patterns signal suspected fraud, we trigger our live simulation.*
 >
-> The Policy Engine APPROVES the fraud escalation, halting auto-refunds and immediately alerting security ops on Slack for manual human review."*
+> *Watch our 5-node stepper execute in real time: classifying the charge as EXACT_DUPLICATE. The LLM recommended ESCALATE_AS_FRAUD, and the Policy Engine APPROVED it, enforcing a fraud escalation to halt auto-refunds.*
+>
+> *Opening the UI Audit Timeline reveals the full event trace — proving every policy decision, Slack security alert, and execution result is logged without AI hallucination."*
 
 ---
 

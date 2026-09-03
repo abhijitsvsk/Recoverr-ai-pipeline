@@ -116,17 +116,19 @@
 
 ---
 
-### ⏱️ **[2:55 – 3:28] Loop 3, Scenario B — Fraud Escalation & Policy Approval**
+### ⏱️ **[2:55 – 3:28] Loop 3, Scenario B — Fraud Escalation & Policy Approval (36s Cut)**
 
 **🖱️ On-Screen Visual:**  
 - `2:55`: Select `POSSIBLE_FRAUD` $\rightarrow$ Click **Run Live Simulation**.
-- `2:55 - 3:09`: Stepper animates (`Ingest → Classify → AI: ESCALATE_AS_FRAUD → Policy: APPROVED → Execute: ESCALATE_AS_FRAUD`).
-- `3:10 - 3:28`: Audit Drawer opens. Mouse points to Policy **APPROVED** badge and Slack security alert. Drawer closes.
+- `2:55 - 3:09`: Stepper animates (`Ingest → Classify: EXACT_DUPLICATE → AI: ESCALATE_AS_FRAUD → Policy: APPROVED → Execute: ESCALATE_AS_FRAUD`).
+- `3:10 - 3:28`: Click **View Timeline** / Audit Drawer opens. Mouse points to Policy **APPROVED** badge and Slack security alert. Drawer closes.
 
 **📢 Spoken Voiceover:**
-> *"When repeat duplicate patterns signal suspected fraud, the AI model recommends escalating directly to security.
+> *"Let me show you Loop 3 for duplicate charges. When repeat duplicate patterns signal suspected fraud, we trigger our live simulation.
 >
-> The Policy Engine APPROVES the fraud escalation, halting auto-refunds and immediately alerting security ops on Slack for manual human review."*
+> Watch our 5-node stepper execute in real time: classifying the charge as EXACT_DUPLICATE. The LLM recommended ESCALATE_AS_FRAUD, and the Policy Engine APPROVED it, enforcing a fraud escalation to halt auto-refunds.
+>
+> Opening the UI Audit Timeline reveals the full event trace — proving every policy decision, Slack security alert, and execution result is logged without AI hallucination."*
 
 ---
 

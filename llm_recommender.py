@@ -5,6 +5,7 @@ Evaluates structured payment context using real LLM calls via Ollama local endpo
 
 import json
 import os
+import random
 import sqlite3
 import urllib.request
 import urllib.error

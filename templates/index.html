@@ -490,6 +490,7 @@
     <div class="tabs-nav" style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
         <button id="tab-btn-loop1" class="tab-btn active" onclick="switchTab('loop1')" style="background-color: var(--primary); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Loop 1: Payment Recovery</button>
         <button id="tab-btn-loop2" class="tab-btn" onclick="switchTab('loop2')" style="background-color: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Loop 2: Checkout Abandonment</button>
+        <button id="tab-btn-loop3" class="tab-btn" onclick="switchTab('loop3')" style="background-color: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Loop 3: Duplicate Charges</button>
     </div>
 
     <!-- LOOP 1 VIEW CONTAINER -->
@@ -749,6 +750,126 @@
     </div>
     <!-- END LOOP 2 VIEW CONTAINER -->
 
+    <!-- LOOP 3 VIEW CONTAINER -->
+    <div id="loop3-view" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Duplicate Charge Detection & Auto-Refund Dashboard</h1>
+                <p>Read-only display layer for duplicate charge detection and automated refund pipeline (Loop 3)</p>
+            </div>
+            <div class="scenario-toolbar">
+                <button id="btn-sim-dup" class="btn-scenario" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); border-color: #8b5cf6;" onclick="simulateDuplicateCharge()">⚡ Simulate Duplicate Charge</button>
+            </div>
+        </div>
+
+        <!-- Headline Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Charges At Risk -->
+            <div class="metric-card">
+                <div class="metric-title">Charges At Risk (Duplicates)</div>
+                <div class="metric-value" id="val-dup-at-risk">₹0</div>
+                <div class="metric-subtext">Total value of charges flagged as potential duplicates.</div>
+            </div>
+
+            <!-- Refunded -->
+            <div class="metric-card">
+                <div class="metric-title">Refunded</div>
+                <div class="metric-value" id="val-dup-refunded" style="color: var(--accent-green);">₹0</div>
+                <div class="metric-subtext">Revenue successfully auto-refunded to customers for confirmed duplicate charges.</div>
+            </div>
+
+            <!-- Refund Rate -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    Refund Rate
+                    <span class="rate-definition">Refunded ÷ At Risk</span>
+                </div>
+                <div class="metric-value" id="val-dup-rate">0.00%</div>
+                <div class="metric-subtext">Percentage of at-risk duplicate charges successfully auto-refunded.</div>
+            </div>
+
+            <!-- Escalated -->
+            <div class="metric-card">
+                <div class="metric-title">Escalated</div>
+                <div class="metric-value" id="val-dup-escalated" style="color: var(--accent-amber);">0</div>
+                <div class="metric-subtext">Suspected fraud or ambiguous duplicates routed to human ops review.</div>
+            </div>
+
+            <!-- No Action (False Positives) -->
+            <div class="metric-card">
+                <div class="metric-title">No Action (Unrelated)</div>
+                <div class="metric-value" id="val-dup-no-action" style="color: var(--text-muted);">0</div>
+                <div class="metric-subtext">Correctly identified as unrelated charges — no refund or escalation needed.</div>
+            </div>
+
+            <!-- Total Charges -->
+            <div class="metric-card">
+                <div class="metric-title">Total Charges Analyzed</div>
+                <div class="metric-value" id="val-dup-total" style="color: var(--accent-blue);">0</div>
+                <div class="metric-subtext">Total duplicate charge records processed through the detection pipeline.</div>
+            </div>
+        </div>
+
+        <!-- Category Breakdown Table -->
+        <div class="card-panel">
+            <h2 class="section-title">Category Breakdown</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Duplicate Category</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="cat-dup-table-body">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Duplicate Charges List -->
+        <div class="card-panel">
+            <h2 class="section-title">Recent Duplicate Charges List</h2>
+            
+            <div class="controls-row">
+                <input type="text" id="search-dup-input" class="input-control" placeholder="Search Charge ID..." style="min-width: 220px;">
+                <select id="filter-dup-category" class="select-control">
+                    <option value="ALL">All Categories</option>
+                    <option value="EXACT_DUPLICATE">EXACT_DUPLICATE</option>
+                    <option value="LIKELY_DUPLICATE">LIKELY_DUPLICATE</option>
+                    <option value="SUSPECTED_DUPLICATE">SUSPECTED_DUPLICATE</option>
+                    <option value="UNRELATED">UNRELATED</option>
+                </select>
+                <select id="filter-dup-status" class="select-control">
+                    <option value="ALL">All Statuses</option>
+                    <option value="SUCCEEDED">SUCCEEDED</option>
+                    <option value="ESCALATED">ESCALATED</option>
+                    <option value="NO_ACTION_TAKEN">NO_ACTION_TAKEN</option>
+                </select>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Charge ID</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Recommendation</th>
+                        <th>Policy Decision</th>
+                        <th>Action Taken</th>
+                        <th>Business Outcome</th>
+                        <th>Final Status</th>
+                        <th>Audit History</th>
+                    </tr>
+                </thead>
+                <tbody id="dup-charges-table-body">
+                    <!-- Dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- END LOOP 3 VIEW CONTAINER -->
+
     <!-- Audit Timeline Modal -->
     <div class="modal-overlay" id="timeline-modal">
         <div class="modal-content">
@@ -765,38 +886,33 @@
     <script>
         let allPayments = [];
         let allCheckouts = [];
+        let allDupCharges = [];
 
         function switchTab(tabName) {
-            const btnLoop1 = document.getElementById('tab-btn-loop1');
-            const btnLoop2 = document.getElementById('tab-btn-loop2');
-            const viewLoop1 = document.getElementById('loop1-view');
-            const viewLoop2 = document.getElementById('loop2-view');
+            const tabs = ['loop1', 'loop2', 'loop3'];
+            const btns = tabs.map(t => document.getElementById('tab-btn-' + t));
+            const views = tabs.map(t => document.getElementById(t + '-view'));
 
-            if (tabName === 'loop1') {
-                btnLoop1.style.backgroundColor = 'var(--primary)';
-                btnLoop1.style.color = '#fff';
-                btnLoop1.style.border = 'none';
+            tabs.forEach((t, i) => {
+                if (t === tabName) {
+                    btns[i].style.backgroundColor = 'var(--primary)';
+                    btns[i].style.color = '#fff';
+                    btns[i].style.border = 'none';
+                    views[i].style.display = 'block';
+                } else {
+                    btns[i].style.backgroundColor = 'var(--card-bg)';
+                    btns[i].style.color = 'var(--text-muted)';
+                    btns[i].style.border = '1px solid var(--border-color)';
+                    views[i].style.display = 'none';
+                }
+            });
 
-                btnLoop2.style.backgroundColor = 'var(--card-bg)';
-                btnLoop2.style.color = 'var(--text-muted)';
-                btnLoop2.style.border = '1px solid var(--border-color)';
-
-                viewLoop1.style.display = 'block';
-                viewLoop2.style.display = 'none';
-            } else {
-                btnLoop2.style.backgroundColor = 'var(--primary)';
-                btnLoop2.style.color = '#fff';
-                btnLoop2.style.border = 'none';
-
-                btnLoop1.style.backgroundColor = 'var(--card-bg)';
-                btnLoop1.style.color = 'var(--text-muted)';
-                btnLoop1.style.border = '1px solid var(--border-color)';
-
-                viewLoop1.style.display = 'none';
-                viewLoop2.style.display = 'block';
-
+            if (tabName === 'loop2') {
                 fetchCheckoutMetrics();
                 fetchCheckouts();
+            } else if (tabName === 'loop3') {
+                fetchDupMetrics();
+                fetchDupCharges();
             }
         }
 
@@ -1199,6 +1315,186 @@
             }
         }
 
+        // ==============================================================================
+        // LOOP 3 JS FUNCTIONS
+        // ==============================================================================
+
+        async function fetchDupMetrics() {
+            try {
+                const resp = await fetch('/api/dup-metrics');
+                const data = await resp.json();
+
+                document.getElementById('val-dup-at-risk').innerText = '₹' + data.charges_at_risk_inr.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                document.getElementById('val-dup-refunded').innerText = '₹' + data.refunded_inr.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                document.getElementById('val-dup-rate').innerText = data.refund_rate_pct.toFixed(2) + '%';
+                document.getElementById('val-dup-escalated').innerText = data.escalated_count;
+                document.getElementById('val-dup-no-action').innerText = data.no_action_count;
+                document.getElementById('val-dup-total').innerText = data.total_charges;
+
+                // Loop 3 Category Table
+                const tbody = document.getElementById('cat-dup-table-body');
+                tbody.innerHTML = '';
+
+                for (const [cat, count] of Object.entries(data.category_counts)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><span class="badge badge-${cat.toLowerCase().replace('_', '-')}">${cat}</span></td>
+                        <td>${count}</td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            } catch (err) {
+                console.error("Error fetching dup metrics:", err);
+            }
+        }
+
+        async function fetchDupCharges() {
+            try {
+                const resp = await fetch('/api/dup-charges');
+                allDupCharges = await resp.json();
+                renderDupCharges();
+            } catch (err) {
+                console.error("Error fetching dup charges:", err);
+            }
+        }
+
+        function renderDupCharges() {
+            const search = document.getElementById('search-dup-input').value.trim().toLowerCase();
+            const catFilter = document.getElementById('filter-dup-category').value;
+            const statusFilter = document.getElementById('filter-dup-status').value;
+
+            const tbody = document.getElementById('dup-charges-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = allDupCharges.filter(c => {
+                if (search && !c.id.toLowerCase().includes(search)) return false;
+                if (catFilter !== 'ALL' && c.category !== catFilter) return false;
+                if (statusFilter !== 'ALL' && c.status !== statusFilter) return false;
+                return true;
+            });
+
+            filtered.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${c.id}</strong></td>
+                    <td>₹${c.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                    <td><span class="badge badge-${(c.category || 'none').toLowerCase().replace('_', '-')}">${c.category || '-'}</span></td>
+                    <td>${c.recommended_action || '-'}</td>
+                    <td><span class="badge badge-${c.policy_decision ? c.policy_decision.toLowerCase() : 'none'}">${c.policy_decision || '-'}</span></td>
+                    <td>${c.action_taken || '-'}</td>
+                    <td>${c.business_outcome || '-'}</td>
+                    <td><span class="badge badge-${c.status.toLowerCase().replace('_', '-')}">${c.status}</span></td>
+                    <td><button class="btn-view" onclick="openDupTimeline('${c.id}')">View Timeline</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function openDupTimeline(chargeId) {
+            document.getElementById('modal-title').innerText = `Duplicate Charge Audit Timeline (${chargeId})`;
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '<p style="color: var(--text-muted);">Loading duplicate charge timeline...</p>';
+
+            document.getElementById('timeline-modal').classList.add('active');
+
+            try {
+                const resp = await fetch(`/api/dup-charges/${chargeId}/timeline`);
+                const timeline = await resp.json();
+
+                container.innerHTML = '';
+                timeline.forEach(evt => {
+                    const item = document.createElement('div');
+                    item.className = 'timeline-item';
+
+                    let detailsHtml = '';
+                    if (evt.event_type === 'CHARGE_INGESTED') {
+                        detailsHtml = `Duplicate charge ingested. Amount: ₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+                    } else if (evt.event_type === 'CLASSIFIED') {
+                        detailsHtml = `Deterministic Category Classification: <strong>${evt.category}</strong>`;
+                    } else if (evt.event_type === 'RECOMMENDED') {
+                        detailsHtml = `LLM Recommendation: <strong>${evt.recommended_action}</strong>`;
+                    } else if (evt.event_type === 'POLICY_DECISION') {
+                        detailsHtml = `Policy Decision: <strong>${evt.policy_decision}</strong><br>Reason: <em>${evt.policy_reason}</em>`;
+                    } else if (evt.event_type === 'ACTION_EXECUTED') {
+                        detailsHtml = `Action Taken: <strong>${evt.action_taken}</strong><br>Execution Result: ${evt.execution_result}<br>Business Outcome: <strong>${evt.business_outcome}</strong>`;
+
+                        if (evt.action_taken === 'AUTO_REFUND') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble" style="border-left-color: #10b981; background-color: #0b1a14;">
+                                    <div class="whatsapp-header" style="color: #10b981;">💳 Auto-Refund Confirmation</div>
+                                    <div class="whatsapp-body">
+                                        <strong>✅ Refund Processed</strong><br>
+                                        Amount: ₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})} | Charge: <code>${evt.charge_id}</code><br>
+                                        <em>Duplicate charge automatically refunded to customer.</em>
+                                    </div>
+                                </div>`;
+                        } else if (evt.action_taken === 'ESCALATE_AS_FRAUD') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble" style="border-left-color: #e01e5a; background-color: #1a0d18;">
+                                    <div class="whatsapp-header" style="color: #e01e5a;">🚨 Fraud Escalation Alert (#fraud-ops)</div>
+                                    <div class="whatsapp-body">
+                                        <strong>⚠️ Suspected Fraud — Duplicate Charge Escalated</strong><br>
+                                        Amount: ₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})} | Category: <code>${evt.category || 'SUSPECTED_DUPLICATE'}</code><br>
+                                        <em>Reason: ${evt.policy_reason || 'Requires manual fraud review before refund.'}</em>
+                                    </div>
+                                </div>`;
+                        } else if (evt.action_taken === 'HOLD_FOR_REVIEW') {
+                            detailsHtml += `
+                                <div class="whatsapp-bubble" style="border-left-color: #f59e0b; background-color: #1a150d;">
+                                    <div class="whatsapp-header" style="color: #f59e0b;">⏸️ Hold for Review (#charge-review)</div>
+                                    <div class="whatsapp-body">
+                                        <strong>🔍 Charge Held for Manual Review</strong><br>
+                                        Amount: ₹${evt.amount_in_inr.toLocaleString('en-IN', {minimumFractionDigits: 2})} | Category: <code>${evt.category || 'LIKELY_DUPLICATE'}</code><br>
+                                        <em>Reason: ${evt.policy_reason || 'Ambiguous duplicate pattern; human verification required.'}</em>
+                                    </div>
+                                </div>`;
+                        }
+                    }
+
+                    item.innerHTML = `
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-time">${evt.timestamp}</div>
+                        <div class="timeline-event-title">${evt.event_type}</div>
+                        <div class="timeline-details">${detailsHtml}</div>
+                    `;
+                    container.appendChild(item);
+                });
+
+            } catch (err) {
+                container.innerHTML = '<p style="color: var(--accent-red);">Error loading duplicate charge timeline details.</p>';
+            }
+        }
+
+        async function simulateDuplicateCharge() {
+            const btn = document.getElementById('btn-sim-dup');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Processing Pipeline...';
+            btn.style.opacity = '0.75';
+
+            try {
+                const resp = await fetch('/api/simulate-duplicate-charge', { method: 'POST' });
+                const res = await resp.json();
+
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+
+                if (res.status === 'success') {
+                    await fetchDupMetrics();
+                    await fetchDupCharges();
+                    await openDupTimeline(res.charge_id);
+                } else {
+                    alert('Simulation Error: ' + (res.message || 'Unknown failure'));
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                alert('Simulation failed: ' + err);
+            }
+        }
+
         document.getElementById('search-input').addEventListener('input', renderPayments);
         document.getElementById('filter-category').addEventListener('change', renderPayments);
         document.getElementById('filter-status').addEventListener('change', renderPayments);
@@ -1206,6 +1502,10 @@
         document.getElementById('search-chk-input').addEventListener('input', renderCheckouts);
         document.getElementById('filter-chk-category').addEventListener('change', renderCheckouts);
         document.getElementById('filter-chk-status').addEventListener('change', renderCheckouts);
+
+        document.getElementById('search-dup-input').addEventListener('input', renderDupCharges);
+        document.getElementById('filter-dup-category').addEventListener('change', renderDupCharges);
+        document.getElementById('filter-dup-status').addEventListener('change', renderDupCharges);
 
         fetchMetrics();
         fetchPayments();

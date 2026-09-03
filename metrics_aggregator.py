@@ -195,8 +195,9 @@ def compute_batch_metrics(
         bus_out = r["business_outcome"]
         pol_dec = policy_logs.get(pid)
 
-        category_breakdown[cat]["count"] += 1
-        category_breakdown[cat]["at_risk_paise"] += amt
+        target_cat = cat if (cat and cat in category_breakdown) else "UNKNOWN"
+        category_breakdown[target_cat]["count"] += 1
+        category_breakdown[target_cat]["at_risk_paise"] += amt
 
         is_recovered = False
         if action == "RETRY" and bus_out == "recovered":
@@ -210,7 +211,7 @@ def compute_batch_metrics(
 
         if is_recovered:
             revenue_recovered_paise += amt
-            category_breakdown[cat]["recovered_paise"] += amt
+            category_breakdown[target_cat]["recovered_paise"] += amt
             if status in ("ESCALATED", "STOPPED"):
                 overlap_count += 1
 

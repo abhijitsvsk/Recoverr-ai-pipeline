@@ -506,22 +506,33 @@ def simulate_checkout_abandonment():
 
 @app.route("/api/dup-metrics")
 def get_dup_metrics():
-    db_path = LIVE_TEST_DUP_DB_PATH if os.path.exists(LIVE_TEST_DUP_DB_PATH) else DEFAULT_DUP_DB_PATH
+    db_path = LIVE_TEST_DUP_DB_PATH if (os.path.exists(LIVE_TEST_DUP_DB_PATH) and os.path.getsize(LIVE_TEST_DUP_DB_PATH) > 0) else DEFAULT_DUP_DB_PATH
     return jsonify(dup_metrics_aggregator.compute_dup_metrics(db_path))
 
 
 @app.route("/api/dup-charges")
 def get_dup_charges():
-    db_path = LIVE_TEST_DUP_DB_PATH if os.path.exists(LIVE_TEST_DUP_DB_PATH) else DEFAULT_DUP_DB_PATH
+    db_path = LIVE_TEST_DUP_DB_PATH if (os.path.exists(LIVE_TEST_DUP_DB_PATH) and os.path.getsize(LIVE_TEST_DUP_DB_PATH) > 0) else DEFAULT_DUP_DB_PATH
     dup_db.init_dup_db(db_path)
     conn = get_dup_connection(db_path)
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT id, customer_id, order_id, card_id, amount_in_paise, time_delta_seconds, prior_duplicate_count, purchase_type, category, status, action_taken, business_outcome, created_at
+        SELECT id, customer_id, order_id, card_id, amount_in_paise, time_delta_seconds, prior_duplicate_count, purchase_type, category, status, recommended_action, recommendation_reason, policy_decision, policy_reason, action_taken, business_outcome, created_at
         FROM duplicate_charges ORDER BY created_at DESC;
     """)
     rows = cursor.fetchall()
     conn.close()
+
+    if not rows and db_path == LIVE_TEST_DUP_DB_PATH:
+        conn = get_dup_connection(DEFAULT_DUP_DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id, customer_id, order_id, card_id, amount_in_paise, time_delta_seconds, prior_duplicate_count, purchase_type, category, status, recommended_action, recommendation_reason, policy_decision, policy_reason, action_taken, business_outcome, created_at
+            FROM duplicate_charges ORDER BY created_at DESC;
+        """)
+        rows = cursor.fetchall()
+        conn.close()
+
     res = []
     for r in rows:
         d = dict(r)
